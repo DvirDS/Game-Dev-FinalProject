@@ -188,7 +188,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.0000001937151, y: 0.034910012}
+  m_Offset: {x: 0.0000001937151, y: -0.0039517917}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -198,7 +198,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.09937717, y: 0.26882443}
+  m_Size: {x: 0.09937717, y: 0.1911008}
   m_EdgeRadius: 0
 --- !u!114 &5768036675234762121
 MonoBehaviour:
@@ -251,9 +251,12 @@ MonoBehaviour:
   muzzle: {fileID: 5521915274489834451}
   input: {fileID: 5768036675234762121}
   ownerTag: Player
+  ownerSprite: {fileID: 0}
   loadout:
   - {fileID: 11400000, guid: a41db8a0d25f2ec4badbf4a9385d40c2, type: 2}
+  - {fileID: 11400000, guid: 84bdeafda789e39468457287ed921e66, type: 2}
   - {fileID: 11400000, guid: a44ab120c58980b45b0c4693b1051915, type: 2}
+  mirrorMuzzleWithFacing: 1
 --- !u!114 &1698125991320905125
 MonoBehaviour:
   m_ObjectHideFlags: 0

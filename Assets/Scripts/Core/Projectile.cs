@@ -7,8 +7,8 @@ public class Projectile : MonoBehaviour
     public int damage = 10;
     public float speed = 12f;
     public float lifeTime = 3f;
-    public LayerMask hitMask;     // נגדיר שכבות שפוגעים בהן
-    public string ownerTag = "Player"; // כדי לא לפגוע ביורה עצמו
+    public LayerMask hitMask;     // ????? ????? ??????? ???
+    public string ownerTag = "Player"; // ??? ?? ????? ????? ????
 
     private Vector2 dir;
 
