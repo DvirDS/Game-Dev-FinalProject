@@ -14,10 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: Pistol
   icon: {fileID: 0}
-  damage: 12
-  fireRate: 3
+  damage: 10
+  fireRate: 1
   muzzleVelocity: 14
   isAutomatic: 0
+  bulletsPerShot: 1
+  spreadAngle: 0
   projectilePrefab: {fileID: 656123203998378217, guid: 3542fc419d434b446bec484fbdae1539, type: 3}
   muzzleVFX: {fileID: 0}
   fireSfx: {fileID: 0}

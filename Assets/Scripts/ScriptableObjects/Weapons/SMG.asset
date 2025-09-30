@@ -14,10 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: SMG
   icon: {fileID: 0}
-  damage: 7
-  fireRate: 10
-  muzzleVelocity: 16
+  damage: 5
+  fireRate: 6
+  muzzleVelocity: 15
   isAutomatic: 1
+  bulletsPerShot: 1
+  spreadAngle: 7.6
   projectilePrefab: {fileID: 656123203998378217, guid: 3542fc419d434b446bec484fbdae1539, type: 3}
   muzzleVFX: {fileID: 0}
   fireSfx: {fileID: 0}

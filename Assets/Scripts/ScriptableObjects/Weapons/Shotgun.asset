@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f9f6bea424df7c4688fb2880c764640, type: 3}
   m_Name: Shotgun
   m_EditorClassIdentifier: 
-  displayName: 
+  displayName: Shotgun
   icon: {fileID: 0}
-  damage: 10
-  fireRate: 5
+  damage: 7
+  fireRate: 1
   muzzleVelocity: 14
-  isAutomatic: 1
-  bulletsPerShot: 1
-  spreadAngle: 0
-  projectilePrefab: {fileID: 0}
+  isAutomatic: 0
+  bulletsPerShot: 3
+  spreadAngle: 10
+  projectilePrefab: {fileID: 656123203998378217, guid: 3542fc419d434b446bec484fbdae1539, type: 3}
   muzzleVFX: {fileID: 0}
   fireSfx: {fileID: 0}
