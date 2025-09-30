@@ -78,8 +78,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -997239353
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: -4841409092833791354, guid: 8268f9a71554df54893f60fa410f7531, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -196,6 +196,9 @@ MonoBehaviour:
   attackRange: 4
   target: {fileID: 7523331421300402640, guid: f9c97aa48105eef41b9a9cf5c58f7c43, type: 3}
   state: 0
+  maxHealth: 20
+  hurtDuration: 0.2
+  deathDestroyDelay: 1.5
   projectilePrefab: {fileID: 2305735452437659149, guid: 2ab9f4dfdfb1e45498ad2015d6dc5469, type: 3}
   muzzle: {fileID: 5764090974431102409}
   shotsPerSecond: 1.5

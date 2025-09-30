@@ -8,6 +8,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1230469777446531617, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
+      propertyPath: m_Interpolate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1230469777446531617, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
+      propertyPath: m_GravityScale
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1230469777446531617, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3011195287830659152, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
       propertyPath: m_Name
       value: WhiteWolf
@@ -64,6 +76,22 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 1464327008863891724, guid: a1aea115b029f6e42b6177a4ba48c76f, type: 3}
+    - target: {fileID: 5807881605182105639, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5807881605182105639, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -997239353
+      objectReference: {fileID: 0}
+    - target: {fileID: 8574871893158674155, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
+      propertyPath: m_Size.y
+      value: 0.17133763
+      objectReference: {fileID: 0}
+    - target: {fileID: 8574871893158674155, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
+      propertyPath: m_Offset.y
+      value: 0.03433117
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3045488537570662474, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
     m_RemovedGameObjects: []

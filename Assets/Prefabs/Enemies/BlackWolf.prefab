@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8574871893158674155}
   - component: {fileID: 443084373735784717}
   - component: {fileID: 2855544352461444767}
+  - component: {fileID: 7751223663916845615}
   m_Layer: 7
   m_Name: BlackWolf
   m_TagString: Enemy
@@ -77,8 +78,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -997239353
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: -3911068123686528056, guid: 93f9ea39c45fe544aa854b392b32f885, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -195,6 +196,9 @@ MonoBehaviour:
   attackRange: 4
   target: {fileID: 7523331421300402640, guid: f9c97aa48105eef41b9a9cf5c58f7c43, type: 3}
   state: 0
+  maxHealth: 20
+  hurtDuration: 0.2
+  deathDestroyDelay: 1.5
   meleeDamage: 12
   meleeRange: 1.1
   hitCooldown: 0.8
@@ -202,3 +206,25 @@ MonoBehaviour:
   waypoints: []
   waypointReachEps: 0.1
   idleAtPointTime: 0
+--- !u!95 &7751223663916845615
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3011195287830659152}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4f26b05420b43b245934398224ad0c91, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
