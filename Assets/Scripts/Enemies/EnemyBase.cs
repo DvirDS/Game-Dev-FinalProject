@@ -27,6 +27,12 @@ public abstract class EnemyBase : MonoBehaviour
     [Header("Animator")]
     [SerializeField] protected Animator animator;
 
+    // Sprite flipping
+    [Header("Visual")]
+    [SerializeField] protected SpriteRenderer spriteRenderer;
+    [SerializeField] protected bool flipByVelocity = true;
+    [SerializeField] protected bool facingRightDefault = true;
+
     // Hashes
     static readonly int HashSpeed = Animator.StringToHash("Speed");
     static readonly int HashIsPatrolling = Animator.StringToHash("IsPatrolling");
@@ -49,6 +55,8 @@ public abstract class EnemyBase : MonoBehaviour
         }
 
         if (!animator) animator = GetComponentInChildren<Animator>();
+        if (!spriteRenderer) spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
         OnEnter(state);
     }
 
@@ -56,6 +64,8 @@ public abstract class EnemyBase : MonoBehaviour
     {
         if (animator)
             animator.SetFloat(HashSpeed, Mathf.Abs(rb ? rb.linearVelocity.x : 0f));
+
+        UpdateFacingByVelocity();
 
         if (state == EnemyState.Dead) { Stop(); return; }
 
@@ -197,4 +207,31 @@ public abstract class EnemyBase : MonoBehaviour
         yield return new WaitForSeconds(deathDestroyDelay);
         Destroy(gameObject);
     }
+
+    // ---- NEW: Flip sprite by velocity ----
+    void UpdateFacingByVelocity()
+    {
+        if (!flipByVelocity || rb == null || !spriteRenderer) return;
+
+        float vx = rb.linearVelocity.x;
+        if (Mathf.Abs(vx) < 0.01f) return;
+
+        bool movingRight = vx > 0f;
+
+        // שים לב: כאן הפכתי את התנאי
+        spriteRenderer.flipX = movingRight;
+    }
+
+    // EnemyBase.cs
+    void OnDrawGizmosSelected()
+    {
+        // טווח זיהוי (צהוב)
+        Gizmos.color = new Color(1f, 0.8f, 0f, 0.5f);
+        Gizmos.DrawWireSphere(transform.position, detectionRange);
+
+        // טווח התקפה (אדום)
+        Gizmos.color = new Color(1f, 0.2f, 0.2f, 0.5f);
+        Gizmos.DrawWireSphere(transform.position, attackRange);
+    }
+
 }

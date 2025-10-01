@@ -19,33 +19,44 @@ public class EnemyMelee : EnemyBase
 
     protected override void PatrolTick()
     {
-        // אם אין נקודות — עוצרים
-        if (waypoints == null || waypoints.Length == 0)
-        {
-            Stop();
-            return;
-        }
+        if (waypoints == null || waypoints.Length == 0) { Stop(); return; }
 
-        // המתנה קלה בנקודה (אם הוגדר)
+        // אם יש השהייה – עוצרים ונראים Idle (IsPatrolling=false)
         if (_idleTimer > 0f)
         {
             _idleTimer -= Time.deltaTime;
             Stop();
+
+            if (animator) animator.SetBool("IsPatrolling", false);
+
+            // כשנגמר – חוזרים להליכה (IsPatrolling=true)
+            if (_idleTimer <= 0f && animator)
+                animator.SetBool("IsPatrolling", true);
+
             return;
         }
 
-        // תנועה לנקודת היעד
+        // תנועה ל-WP הנוכחי
         var dest = (Vector2)waypoints[_wpIndex].position;
         MoveTowards(dest);
 
-        // כשהגענו מספיק קרוב — מעבר לנקודה הבאה
+        // הגענו?
         if (Vector2.Distance(transform.position, dest) <= waypointReachEps)
         {
             _wpIndex = (_wpIndex + 1) % waypoints.Length;
-            _idleTimer = idleAtPointTime;
-            Stop();
+
+            if (idleAtPointTime > 0f)
+            {
+                _idleTimer = idleAtPointTime;
+                Stop();
+
+                // מיידית נעבור ויזואלית ל-Idle
+                if (animator) animator.SetBool("IsPatrolling", false);
+            }
         }
     }
+
+
 
     protected override void ChaseTick()
     {
