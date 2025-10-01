@@ -3,7 +3,6 @@ using UnityEngine;
 
 public abstract class EnemyBase : MonoBehaviour
 {
-    // הוספנו Hurt ו-Dead
     public enum EnemyState { Patrol, Chase, Attack, Hurt, Dead }
 
     [Header("Stats")]
@@ -13,102 +12,89 @@ public abstract class EnemyBase : MonoBehaviour
 
     [Header("Refs")]
     [SerializeField] protected Transform target;
-
     protected Rigidbody2D rb;
+
     [SerializeField] protected EnemyState state = EnemyState.Patrol;
 
-    // === Health (תוספת מינימלית) ===
     [Header("Health")]
     [SerializeField, Min(1)] protected int maxHealth = 20;
-    [SerializeField, Min(0f)] protected float hurtDuration = 0.2f;      // זמן Hurt קצר (i-frames)
-    [SerializeField, Min(0f)] protected float deathDestroyDelay = 1.5f; // השהיה לפני Destroy
+    [SerializeField, Min(0f)] protected float hurtDuration = 0.2f;
+    [SerializeField, Min(0f)] protected float deathDestroyDelay = 1.5f;
 
     protected int _health;
     protected bool _invulnerable;
 
-    // === לייפסייקל ===
+    [Header("Animator")]
+    [SerializeField] protected Animator animator;
+
+    // Hashes
+    static readonly int HashSpeed = Animator.StringToHash("Speed");
+    static readonly int HashIsPatrolling = Animator.StringToHash("IsPatrolling");
+    static readonly int HashIsChasing = Animator.StringToHash("IsChasing");
+    static readonly int HashIsAttacking = Animator.StringToHash("IsAttacking");
+    static readonly int HashHurt = Animator.StringToHash("Hurt");
+    static readonly int HashIsDead = Animator.StringToHash("IsDead");
+
     protected virtual void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        rb.freezeRotation = true;
+        if (rb) rb.freezeRotation = true;
 
         _health = Mathf.Max(1, maxHealth);
 
-        // אם לא שובץ יעד, נסה למצוא את השחקן
         if (!target)
         {
             var p = GameObject.FindWithTag("Player");
             if (p) target = p.transform;
         }
+
+        if (!animator) animator = GetComponentInChildren<Animator>();
+        OnEnter(state);
     }
 
     protected virtual void Update()
     {
-        // אם מת — לא מבצעים לוגיקה
+        if (animator)
+            animator.SetFloat(HashSpeed, Mathf.Abs(rb ? rb.linearVelocity.x : 0f));
+
         if (state == EnemyState.Dead) { Stop(); return; }
 
-        // פאוז/דיאלוג/גיים־אובר — עצירת AI (כמו שהיה אצלך)
-        if (GameManager.I && (GameManager.I.State == GameManager.GameState.Pause ||
-                              GameManager.I.State == GameManager.GameState.Dialogue ||
-                              GameManager.I.State == GameManager.GameState.GameOver))
+        if (GameManager.I &&
+            (GameManager.I.State == GameManager.GameState.Pause ||
+             GameManager.I.State == GameManager.GameState.Dialogue ||
+             GameManager.I.State == GameManager.GameState.GameOver))
         {
             Stop();
             return;
         }
 
-        // בזמן Hurt נותנים לפגיעה “לרוץ” בלי להחליף מצבים
-        if (state == EnemyState.Hurt)
-        {
-            return;
-        }
+        if (state == EnemyState.Hurt) return;
 
-        // Transitions של האויב (כמו שהיה)
         if (InRange(attackRange)) ChangeState(EnemyState.Attack);
         else if (InRange(detectionRange)) ChangeState(EnemyState.Chase);
         else ChangeState(EnemyState.Patrol);
 
-        // התנהגות לפי State (הוספנו רק case-ים ריקים ל-Hurt/Dead)
         switch (state)
         {
             case EnemyState.Patrol: PatrolTick(); break;
             case EnemyState.Chase: ChaseTick(); break;
             case EnemyState.Attack: AttackTick(); break;
-            case EnemyState.Hurt: break;
-            case EnemyState.Dead: return;
         }
     }
 
-    // === API משותף ועזרי תנועה ===
     protected bool InRange(float r) =>
         target && Vector2.Distance(transform.position, target.position) <= r;
 
     protected void MoveTowards(Vector2 pos)
     {
-        Vector2 dir = (pos - (Vector2)transform.position).normalized;
-        rb.linearVelocity = dir * moveSpeed; // נשאר כפי שהיה
+        Vector2 dir = (pos - (Vector2)transform.position);
+        if (dir.sqrMagnitude > 0.0001f) dir.Normalize();
+        if (rb) rb.linearVelocity = dir * moveSpeed;
     }
 
-    protected void Stop() => rb.linearVelocity = Vector2.zero;
-
-    // === שינוי מצב קליל ===
-    protected virtual void OnEnter(EnemyState s)
+    protected void Stop()
     {
-        if (s == EnemyState.Hurt)
-        {
-            Stop();
-            // אם תרצה בעתיד: animator?.SetTrigger("Hurt");
-        }
-        else if (s == EnemyState.Dead)
-        {
-            Stop();
-            // אם תרצה בעתיד: animator?.SetBool("IsDead", true);
-            // אפשר גם להשבית קוליידרים כאן אם צריך.
-        }
-    }
-
-    protected virtual void OnExit(EnemyState s)
-    {
-        if (s != EnemyState.Attack) Stop();
+        if (rb) rb.linearVelocity = Vector2.zero;
     }
 
     protected void ChangeState(EnemyState next)
@@ -119,12 +105,66 @@ public abstract class EnemyBase : MonoBehaviour
         OnEnter(state);
     }
 
-    // === נקודות הרחבה שחייבים לממש בילד ===
+    protected virtual void OnEnter(EnemyState s)
+    {
+        switch (s)
+        {
+            case EnemyState.Patrol:
+                if (animator)
+                {
+                    animator.SetBool(HashIsPatrolling, true);
+                    animator.SetBool(HashIsChasing, false);
+                    animator.SetBool(HashIsAttacking, false);
+                }
+                break;
+
+            case EnemyState.Chase:
+                if (animator)
+                {
+                    animator.SetBool(HashIsChasing, true);
+                    animator.SetBool(HashIsPatrolling, false);
+                    animator.SetBool(HashIsAttacking, false);
+                }
+                break;
+
+            case EnemyState.Attack:
+                if (animator) animator.SetBool(HashIsAttacking, true);
+                break;
+
+            case EnemyState.Hurt:
+                Stop();
+                if (animator) animator.SetTrigger(HashHurt);
+                break;
+
+            case EnemyState.Dead:
+                Stop();
+                if (animator) animator.SetBool(HashIsDead, true);
+                break;
+        }
+    }
+
+    protected virtual void OnExit(EnemyState s)
+    {
+        if (s != EnemyState.Attack) Stop();
+
+        switch (s)
+        {
+            case EnemyState.Patrol:
+                if (animator) animator.SetBool(HashIsPatrolling, false);
+                break;
+            case EnemyState.Chase:
+                if (animator) animator.SetBool(HashIsChasing, false);
+                break;
+            case EnemyState.Attack:
+                if (animator) animator.SetBool(HashIsAttacking, false);
+                break;
+        }
+    }
+
     protected abstract void PatrolTick();
     protected virtual void ChaseTick() { if (target) MoveTowards(target.position); }
     protected abstract void AttackTick();
 
-    // === Damage / Hurt / Death – מינימלי, לא נוגע בילדים ===
     public virtual void TakeDamage(int amount)
     {
         if (state == EnemyState.Dead || _invulnerable) return;
@@ -139,22 +179,19 @@ public abstract class EnemyBase : MonoBehaviour
         StartCoroutine(HurtRoutine());
     }
 
-    private IEnumerator HurtRoutine()
+    IEnumerator HurtRoutine()
     {
         _invulnerable = true;
         ChangeState(EnemyState.Hurt);
-
         yield return new WaitForSeconds(hurtDuration);
-
         _invulnerable = false;
 
-        // חזרה “חכמה” למצב מתאים
         if (InRange(attackRange)) ChangeState(EnemyState.Attack);
         else if (InRange(detectionRange)) ChangeState(EnemyState.Chase);
         else ChangeState(EnemyState.Patrol);
     }
 
-    private IEnumerator DieRoutine()
+    IEnumerator DieRoutine()
     {
         ChangeState(EnemyState.Dead);
         yield return new WaitForSeconds(deathDestroyDelay);

@@ -20,6 +20,18 @@ PrefabInstance:
       propertyPath: m_CollisionDetection
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2855544352461444767, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
+      propertyPath: idleAtPointTime
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2855544352461444767, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
+      propertyPath: waypointReachEps
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2855544352461444767, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
+      propertyPath: waypoints.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3011195287830659152, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
       propertyPath: m_Name
       value: WhiteWolf
