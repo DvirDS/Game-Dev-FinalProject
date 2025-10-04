@@ -8,6 +8,9 @@ using UnityEngine;
 /// - Handles weapon switching.
 public class WeaponController : MonoBehaviour
 {
+    [Header("Firing Logic")]
+    [SerializeField] private LayerMask obstacleMask; //  נוסיף את זה. נגדיר ב-Inspector את שכבת הקירות
+
     [Header("Input / Owner")]
     [SerializeField] private PlayerInputReader input;
     [SerializeField] private string ownerTag = "Player";
@@ -70,12 +73,32 @@ public class WeaponController : MonoBehaviour
         var m = GetMuzzle();
         if (!m || !w || !w.projectilePrefab) return;
 
+        // --- התוספת החדשה מתחילה כאן ---
+
+        // 1. קבע נקודת התחלה בטוחה ל-Raycast (מרכז השחקן או בסיס הנשק)
+        Vector2 raycastOrigin = transform.position; // או מיקום אחר שאתה יודע שהוא לא בתוך קיר
+
+        // 2. קבע את היעד - המיקום המקורי של הלוע
+        Vector2 targetMuzzlePos = m.position;
+
+        // 3. חשב את הכיוון והמרחק
+        Vector2 directionToMuzzle = targetMuzzlePos - raycastOrigin;
+        float distanceToMuzzle = directionToMuzzle.magnitude;
+
+        // 4. בצע את ה-Raycast
+        RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, directionToMuzzle.normalized, distanceToMuzzle, obstacleMask);
+
+        // 5. קבע את מיקום היצירה הסופי של הכדור
+        // השורה החדשה והמשופרת:
+        Vector3 spawnPosition = hit.collider ? (Vector3)(hit.point + hit.normal * 0.01f) : m.position;
+
+        // --- סוף התוספת ---
+
+
         int count = Mathf.Max(1, w.bulletsPerShot);
         float totalSpread = Mathf.Max(0f, w.spreadAngle);
         float halfSpread = totalSpread * 0.5f;
 
-        // Base direction:
-        // use sign of global X-scale so shots flip when the weapon is mirrored.
         float sign = Mathf.Sign(m.lossyScale.x);
         Vector3 baseDir = (sign >= 0f) ? m.right : -m.right;
 
@@ -83,7 +106,8 @@ public class WeaponController : MonoBehaviour
         {
             float ang = (totalSpread > 0f) ? Random.Range(-halfSpread, halfSpread) : 0f;
             Quaternion spreadRot = Quaternion.AngleAxis(ang, Vector3.forward);
-            ShootOne(w, m.position, m.rotation, spreadRot * baseDir);
+            //               שינוי כאן vvvvvvvvvvvv
+            ShootOne(w, spawnPosition, m.rotation, spreadRot * baseDir);
         }
         else
         {
@@ -92,11 +116,12 @@ public class WeaponController : MonoBehaviour
             {
                 float ang = -halfSpread + step * i;
                 Quaternion spreadRot = Quaternion.AngleAxis(ang, Vector3.forward);
-                ShootOne(w, m.position, m.rotation, spreadRot * baseDir);
+                //               שינוי כאן vvvvvvvvvvvv
+                ShootOne(w, spawnPosition, m.rotation, spreadRot * baseDir);
             }
         }
 
-        PlayMuzzleFlash(); // FX
+        PlayMuzzleFlash();
     }
 
     private void ShootOne(WeaponData w, Vector3 pos, Quaternion rot, Vector3 dir)

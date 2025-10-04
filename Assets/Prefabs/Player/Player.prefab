@@ -274,14 +274,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62cb1a51f3159ec4b9088cd53b7816bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 256
   input: {fileID: 5768036675234762121}
   ownerTag: Player
   visuals: {fileID: 5260971325461626436}
   muzzle: {fileID: 0}
-  muzzleFlashAnimator: {fileID: 0}
   muzzleFlashStateName: MuzzleFlash
   muzzleFlashNormallyHidden: 1
-  muzzleFlashAutoHideDelay: 0.08
+  muzzleFlashAutoHideDelay: 0.1
   loadout:
   - {fileID: 11400000, guid: a41db8a0d25f2ec4badbf4a9385d40c2, type: 2}
   - {fileID: 11400000, guid: 84bdeafda789e39468457287ed921e66, type: 2}
