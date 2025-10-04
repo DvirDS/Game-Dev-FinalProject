@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4112073813785585152}
   - component: {fileID: 973303777050992094}
   m_Layer: 0
-  m_Name: SideWalls 1
+  m_Name: SideWalls
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
