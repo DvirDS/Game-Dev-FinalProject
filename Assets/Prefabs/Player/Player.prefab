@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2351938384337153012
+--- !u!1 &3809929173923616016
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,29 +8,55 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5521915274489834451}
-  m_Layer: 6
-  m_Name: Muzzle
+  - component: {fileID: 2091884035049017739}
+  - component: {fileID: 5260971325461626436}
+  m_Layer: 0
+  m_Name: WeaponMount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5521915274489834451
+--- !u!4 &2091884035049017739
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2351938384337153012}
+  m_GameObject: {fileID: 3809929173923616016}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.092, y: -0.066, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.084, y: -0.072, z: 0}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7523331421300402640}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5260971325461626436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3809929173923616016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fec9cd74547216f408b2f3fb0e9baa37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponController: {fileID: 2662363391807155769}
+  weaponMount: {fileID: 2091884035049017739}
+  ownerSprite: {fileID: 1307848321281102721}
+  skins:
+  - weapon: {fileID: 11400000, guid: a41db8a0d25f2ec4badbf4a9385d40c2, type: 2}
+    prefab: {fileID: 2408370599877556940, guid: e3778d30443ca664f831dbb860643be5, type: 3}
+  - weapon: {fileID: 11400000, guid: a44ab120c58980b45b0c4693b1051915, type: 2}
+    prefab: {fileID: 5060822515736821211, guid: d8673666975cf3143a5ef63ff1149f8f, type: 3}
+  - weapon: {fileID: 11400000, guid: 84bdeafda789e39468457287ed921e66, type: 2}
+    prefab: {fileID: 6751367478949237743, guid: b1844b0457dc8ba469a79e587e542162, type: 3}
+  sortingLayerOverride: 
+  orderInLayerOffset: 1
+  rightHandOffset: {x: 0.084, y: -0.083}
 --- !u!1 &5401686412436322846
 GameObject:
   m_ObjectHideFlags: 0
@@ -68,8 +94,8 @@ Transform:
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 1
   m_Children:
-  - {fileID: 5521915274489834451}
   - {fileID: 9049793258314313105}
+  - {fileID: 2091884035049017739}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1307848321281102721
@@ -248,15 +274,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62cb1a51f3159ec4b9088cd53b7816bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  muzzle: {fileID: 5521915274489834451}
   input: {fileID: 5768036675234762121}
   ownerTag: Player
-  ownerSprite: {fileID: 0}
+  visuals: {fileID: 5260971325461626436}
+  muzzle: {fileID: 0}
+  muzzleFlashAnimator: {fileID: 0}
+  muzzleFlashStateName: MuzzleFlash
+  muzzleFlashNormallyHidden: 1
+  muzzleFlashAutoHideDelay: 0.08
   loadout:
   - {fileID: 11400000, guid: a41db8a0d25f2ec4badbf4a9385d40c2, type: 2}
   - {fileID: 11400000, guid: 84bdeafda789e39468457287ed921e66, type: 2}
   - {fileID: 11400000, guid: a44ab120c58980b45b0c4693b1051915, type: 2}
-  mirrorMuzzleWithFacing: 1
 --- !u!114 &1698125991320905125
 MonoBehaviour:
   m_ObjectHideFlags: 0
