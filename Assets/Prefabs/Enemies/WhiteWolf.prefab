@@ -21,6 +21,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2855544352461444767, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 366332314157938328}
+    - target: {fileID: 2855544352461444767, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
       propertyPath: moveSpeed
       value: 6
       objectReference: {fileID: 0}
@@ -33,12 +37,20 @@ PrefabInstance:
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2855544352461444767, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
+      propertyPath: spriteRenderer
+      value: 
+      objectReference: {fileID: 4475773302507000976}
+    - target: {fileID: 2855544352461444767, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
       propertyPath: idleAtPointTime
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2855544352461444767, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
       propertyPath: waypointReachEps
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2855544352461444767, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
+      propertyPath: facingRightDefault
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2855544352461444767, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
       propertyPath: waypoints.Array.size
@@ -122,3 +134,13 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
+--- !u!95 &366332314157938328 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 7751223663916845615, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
+  m_PrefabInstance: {fileID: 7963658913733999799}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &4475773302507000976 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 5807881605182105639, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
+  m_PrefabInstance: {fileID: 7963658913733999799}
+  m_PrefabAsset: {fileID: 0}

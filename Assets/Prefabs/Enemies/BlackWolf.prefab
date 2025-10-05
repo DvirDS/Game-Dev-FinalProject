@@ -153,7 +153,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.033286393}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -163,7 +163,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.36, y: 0.24}
+  m_Size: {x: 0.36, y: 0.1734272}
   m_EdgeRadius: 0
 --- !u!114 &443084373735784717
 MonoBehaviour:
@@ -196,16 +196,22 @@ MonoBehaviour:
   attackRange: 4
   target: {fileID: 7523331421300402640, guid: f9c97aa48105eef41b9a9cf5c58f7c43, type: 3}
   state: 0
-  maxHealth: 20
+  maxHealth: 30
   hurtDuration: 0.2
   deathDestroyDelay: 1.5
+  animator: {fileID: 7751223663916845615}
+  spriteRenderer: {fileID: 5807881605182105639}
+  flipByVelocity: 1
+  facingRightDefault: 1
   meleeDamage: 12
   meleeRange: 1.1
   hitCooldown: 0.8
   stopDistance: 0.6
-  waypoints: []
-  waypointReachEps: 0.1
-  idleAtPointTime: 0
+  waypoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  waypointReachEps: 0.5
+  idleAtPointTime: 3
 --- !u!95 &7751223663916845615
 Animator:
   serializedVersion: 7
@@ -216,7 +222,7 @@ Animator:
   m_GameObject: {fileID: 3011195287830659152}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 4f26b05420b43b245934398224ad0c91, type: 2}
+  m_Controller: {fileID: 22100000, guid: 1c275a4cdc94dc34b881086082f403e2, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
