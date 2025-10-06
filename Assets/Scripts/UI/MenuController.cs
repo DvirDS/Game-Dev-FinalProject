@@ -1,39 +1,51 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class MenuController : MonoBehaviour
 {
-    [SerializeField] private GameObject creditsPanel; // גרור לכאן את הפאנל של הקרדיטים דרך האינספקטור
+    [SerializeField] private GameObject mainPanel;
+    [SerializeField] private GameObject creditsPanel;
 
-    // כפתור "התחל משחק" - טוען את סצנת השלב הראשון
-    public void PlayGame()
+    [SerializeField] private GameObject firstMainSelected;
+    [SerializeField] private GameObject firstCreditsSelected;
+
+    private void Awake()
     {
-        // אפשר לפי שם:
-        SceneManager.LoadScene("Game");
-        // או לפי אינדקס אם השלב הראשון הוא 1:
-        // SceneManager.LoadScene(1);
+        ShowMain();
     }
 
-    // כפתור "קרדיטים" - מציג את הפאנל
     public void OpenCredits()
     {
-        if (creditsPanel != null)
-            creditsPanel.SetActive(true);
+        mainPanel.SetActive(false);
+        creditsPanel.SetActive(true);
+
+        if (firstCreditsSelected != null)
+            EventSystem.current?.SetSelectedGameObject(firstCreditsSelected);
     }
 
-    // כפתור "חזרה" בתוך הקרדיטים - מסתיר את הפאנל
     public void CloseCredits()
     {
-        if (creditsPanel != null)
-            creditsPanel.SetActive(false);
+        creditsPanel.SetActive(false);
+        mainPanel.SetActive(true);
+
+        if (firstMainSelected != null)
+            EventSystem.current?.SetSelectedGameObject(firstMainSelected);
+    }
+    public void PlayGame()
+    {
+        SceneManager.LoadScene("Game");
     }
 
-    // כפתור "יציאה"
     public void QuitGame()
     {
-        // בסביבת העריכה זה פשוט יעצור את מצב ה-Play
         UnityEditor.EditorApplication.isPlaying = false;
-        // בבילד אמיתי זה יסגור את המשחק
         Application.Quit();
+    }
+
+    private void ShowMain()
+    {
+        if (mainPanel != null) mainPanel.SetActive(true);
+        if (creditsPanel != null) creditsPanel.SetActive(false);
     }
 }
