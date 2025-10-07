@@ -268,13 +268,13 @@ AnimatorController:
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
   - m_Name: IsAttacking
-    m_Type: 9
+    m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
   - m_Name: Hurt
-    m_Type: 9
+    m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
@@ -391,7 +391,7 @@ AnimatorStateMachine:
     m_Position: {x: 210, y: 440, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -3387118451649200776}
-    m_Position: {x: -70, y: 430, z: 0}
+    m_Position: {x: -70, y: 440, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1502661874768344159}
     m_Position: {x: 480, y: 440, z: 0}

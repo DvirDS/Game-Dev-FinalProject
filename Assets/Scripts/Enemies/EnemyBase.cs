@@ -218,18 +218,18 @@ public abstract class EnemyBase : MonoBehaviour
 
         bool movingRight = vx > 0f;
 
-        // שים לב: כאן הפכתי את התנאי
+        // ??? ??: ??? ????? ?? ?????
         spriteRenderer.flipX = movingRight;
     }
 
     // EnemyBase.cs
     void OnDrawGizmosSelected()
     {
-        // טווח זיהוי (צהוב)
+        // ???? ????? (????)
         Gizmos.color = new Color(1f, 0.8f, 0f, 0.5f);
         Gizmos.DrawWireSphere(transform.position, detectionRange);
 
-        // טווח התקפה (אדום)
+        // ???? ??÷?? (????)
         Gizmos.color = new Color(1f, 0.2f, 0.2f, 0.5f);
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
