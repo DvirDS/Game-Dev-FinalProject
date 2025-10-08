@@ -196,13 +196,13 @@ MonoBehaviour:
   attackRange: 4
   useBoxDetection: 1
   detectionBoxSize: {x: 8, y: 4}
-  attackBoxSize: {x: 4, y: 2}
+  attackBoxSize: {x: 4, y: 3}
   obstacleMask:
     serializedVersion: 2
     m_Bits: 256
   target: {fileID: 7523331421300402640, guid: f9c97aa48105eef41b9a9cf5c58f7c43, type: 3}
   state: 0
-  maxHealth: 30
+  maxHealth: 40
   hurtDuration: 0.2
   deathDestroyDelay: 1.5
   animator: {fileID: 7751223663916845615}
@@ -216,8 +216,8 @@ MonoBehaviour:
   edgeCheckForward: 0.45
   edgeCheckDown: 0.9
   wallCheckDistance: 0.25
-  meleeDamage: 12
-  meleeRange: 1.1
+  meleeDamage: 20
+  meleeRange: 3
   hitCooldown: 0.8
   stopDistance: 0.6
   waypoints:
