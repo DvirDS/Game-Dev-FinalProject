@@ -4,9 +4,9 @@ public class EnemyMelee : EnemyBase
 {
     [Header("Melee")]
     [SerializeField, Min(1)] private int meleeDamage = 12;
-    [SerializeField, Min(0f)] private float meleeRange = 1.1f;   // θεεη τβιςδ
-    [SerializeField, Min(0f)] private float hitCooldown = 0.8f;  // ωπιεϊ αιο τβιςεϊ
-    [SerializeField, Min(0f)] private float stopDistance = 0.6f; // ξψηχ μςφιψδ μτπι διςγ
+    [SerializeField, Min(0f)] private float meleeRange = 1.1f;   // ΧΧ•Χ•Χ— Χ¤Χ’Χ™ΧΆΧ”
+    [SerializeField, Min(0f)] private float hitCooldown = 0.8f;  // Χ©Χ Χ™Χ•Χª Χ‘Χ™Χ Χ¤Χ’Χ™ΧΆΧ•Χª
+    [SerializeField, Min(0f)] private float stopDistance = 0.6f; // ΧΧ¨Χ—Χ§ ΧΧΆΧ¦Χ™Χ¨Χ” ΧΧ¤Χ Χ™ Χ”Χ™ΧΆΧ“
 
     [Header("Patrol (Optional)")]
     [SerializeField] private Transform[] waypoints;
@@ -21,7 +21,7 @@ public class EnemyMelee : EnemyBase
     {
         if (waypoints == null || waypoints.Length == 0) { Stop(); return; }
 
-        // ΰν ιω δωδιιδ – ςεφψιν επψΰιν Idle (IsPatrolling=false)
+        // ΧΧ Χ™Χ© Χ”Χ©Χ”Χ™Χ™Χ” β€“ ΧΆΧ•Χ¦Χ¨Χ™Χ Χ•Χ Χ¨ΧΧ™Χ Idle (IsPatrolling=false)
         if (_idleTimer > 0f)
         {
             _idleTimer -= Time.deltaTime;
@@ -29,18 +29,24 @@ public class EnemyMelee : EnemyBase
 
             if (animator) animator.SetBool("IsPatrolling", false);
 
-            // λωπβξψ – ηεζψιν μδμιλδ (IsPatrolling=true)
+            // Χ›Χ©Χ Χ’ΧΧ¨ β€“ Χ—Χ•Χ–Χ¨Χ™Χ ΧΧ”ΧΧ™Χ›Χ” (IsPatrolling=true)
             if (_idleTimer <= 0f && animator)
                 animator.SetBool("IsPatrolling", true);
 
             return;
         }
 
-        // ϊπεςδ μ-WP δπεληι
+        // ΧªΧ Χ•ΧΆΧ” Χ-WP Χ”Χ Χ•Χ›Χ—Χ™
         var dest = (Vector2)waypoints[_wpIndex].position;
+        // ΧΧ ΧΧ–Χ•Χ– ΧΧ ΧΧ™Χ Χ¨Χ¦Χ¤Χ”/Χ™Χ© Χ§Χ™Χ¨ Χ§Χ“Χ™ΧΧ”
+        if (!CanStepTowardsX(dest))
+        {
+            Stop();
+            return;
+        }
         MoveTowards(dest);
 
-        // δβςπε?
+        // Χ”Χ’ΧΆΧ Χ•?
         if (Vector2.Distance(transform.position, dest) <= waypointReachEps)
         {
             _wpIndex = (_wpIndex + 1) % waypoints.Length;
@@ -50,13 +56,13 @@ public class EnemyMelee : EnemyBase
                 _idleTimer = idleAtPointTime;
                 Stop();
 
-                // ξιιγιϊ πςαεψ ειζεΰμιϊ μ-Idle
+                // ΧΧ™Χ™Χ“Χ™Χª Χ ΧΆΧ‘Χ•Χ¨ Χ•Χ™Χ–Χ•ΧΧΧ™Χª Χ-Idle
                 if (animator) animator.SetBool("IsPatrolling", false);
             }
         }
     }
 
-    // --- φ'ιιρ ψχ αφιψ X ---
+    // --- Χ¦'Χ™Χ™Χ΅ Χ¨Χ§ Χ‘Χ¦Χ™Χ¨ X + Χ”Χ’Χ Χ” ΧΧ¤Χ Χ™ Χ Χ¤Χ™ΧΧ”/Χ§Χ™Χ¨ ---
     protected override void ChaseTick()
     {
         if (!target)
@@ -65,12 +71,18 @@ public class EnemyMelee : EnemyBase
             return;
         }
 
-        // πψγεσ ψχ ςμ φιψ X: μεχηιν ΰϊ X ωμ δωηχο ΰαμ ξωΰιψιν ΰϊ Y δπεληι ωμ δΰεια
+        // Χ Χ¨Χ“Χ•Χ£ Χ¨Χ§ ΧΆΧ Χ¦Χ™Χ¨ X: ΧΧ•Χ§Χ—Χ™Χ ΧΧª X Χ©Χ Χ”Χ©Χ—Χ§Χ ΧΧ‘Χ ΧΧ©ΧΧ™Χ¨Χ™Χ ΧΧª Y Χ”Χ Χ•Χ›Χ—Χ™ Χ©Χ Χ”ΧΧ•Χ™Χ‘
         Vector2 selfPos = transform.position;
         Vector2 targetPos = target.position;
         Vector2 chasePos = new Vector2(targetPos.x, selfPos.y);
 
-        // ξϊχψαιν ςγ ξψηχ ςφιψδ (λγι μΰ "μψχεγ" ςμ δχεμιιγψ ωμ δωηχο)
+        if (!CanStepTowardsX(chasePos))
+        {
+            Stop(); // Χ§Χ¦Χ” Χ¤ΧΧΧ¤Χ•Χ¨ΧΧ” ΧΧ• Χ§Χ™Χ¨ β€” ΧΧ ΧΧ–Χ•Χ–
+            return;
+        }
+
+        // ΧΧªΧ§Χ¨Χ‘Χ™Χ ΧΆΧ“ ΧΧ¨Χ—Χ§ ΧΆΧ¦Χ™Χ¨Χ” (Χ›Χ“Χ™ ΧΧ "ΧΧ¨Χ§Χ•Χ“" ΧΆΧ Χ”Χ§Χ•ΧΧ™Χ™Χ“Χ¨ Χ©Χ Χ”Χ©Χ—Χ§Χ)
         float distX = Mathf.Abs(targetPos.x - selfPos.x);
         if (distX > Mathf.Max(stopDistance, 0.01f))
             MoveTowards(chasePos);
@@ -78,7 +90,7 @@ public class EnemyMelee : EnemyBase
             Stop();
     }
 
-    // --- βν αδϊχτδ ππςμ ςμ βεαδ δΰεια λγι μΰ μψησ ---
+    // --- Χ’Χ Χ‘Χ”ΧªΧ§Χ¤Χ” Χ Χ ΧΆΧ ΧΆΧ Χ’Χ•Χ‘Χ” Χ”ΧΧ•Χ™Χ‘ Χ•ΧΧ•Χ ΧΆΧ™Χ Χ Χ¤Χ™ΧΧ” ---
     protected override void AttackTick()
     {
         if (!target)
@@ -89,20 +101,26 @@ public class EnemyMelee : EnemyBase
 
         Vector2 selfPos = transform.position;
         Vector2 targetPos = target.position;
-        Vector2 lockedPos = new Vector2(targetPos.x, selfPos.y); // πεςμ Y
+        Vector2 lockedPos = new Vector2(targetPos.x, selfPos.y); // Χ Χ•ΧΆΧ Y
 
-        // πςξεγ χψεα μιςγ λγι μδαθιη τβιςδ, ΰαμ ψχ ςμ φιψ X
+        if (!CanStepTowardsX(lockedPos))
+        {
+            Stop();
+            return;
+        }
+
+        // Χ ΧΆΧΧ•Χ“ Χ§Χ¨Χ•Χ‘ ΧΧ™ΧΆΧ“ Χ›Χ“Χ™ ΧΧ”Χ‘ΧΧ™Χ— Χ¤Χ’Χ™ΧΆΧ”, ΧΧ‘Χ Χ¨Χ§ ΧΆΧ Χ¦Χ™Χ¨ X
         float distX = Mathf.Abs(targetPos.x - selfPos.x);
         if (distX > stopDistance)
             MoveTowards(lockedPos);
         else
             Stop();
 
-        // χφα τβιςδ
+        // Χ§Χ¦Χ‘ Χ¤Χ’Χ™ΧΆΧ”
         _cooldown -= Time.deltaTime;
         if (_cooldown > 0f) return;
 
-        // αγιχϊ θεεη τβιςδ: παγεχ ξψηχ ΰξιϊι ΰαμ αγψκ λμμ ςγισ μδρϊξκ ςμ θψιβψ/διθαεχρ
+        // Χ‘Χ“Χ™Χ§Χª ΧΧ•Χ•Χ— Χ¤Χ’Χ™ΧΆΧ”
         float dist = Vector2.Distance(transform.position, target.position);
         if (dist <= meleeRange && target.TryGetComponent<IDamageable>(out var dmg))
         {

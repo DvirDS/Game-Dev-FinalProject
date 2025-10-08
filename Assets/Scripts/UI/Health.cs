@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Health : MonoBehaviour, IDamageable
+public class Health : MonoBehaviour
 {
     [SerializeField, Min(1)] private int maxHealth = 100;
     [SerializeField] private bool isPlayer;
@@ -27,8 +27,18 @@ public class Health : MonoBehaviour, IDamageable
 
     private void Die()
     {
-        if (isPlayer) return; // GameManager כבר מטפל בגיימאובר דרך השחקן
-        Destroy(gameObject);
+        if (isPlayer) return;
+
+        EnemyBase enemy = GetComponent<EnemyBase>();
+        if (enemy != null)
+        {
+            // קריאה ישירה, נקייה וברורה לפונקציית המוות החדשה
+            enemy.Kill();
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 }
 

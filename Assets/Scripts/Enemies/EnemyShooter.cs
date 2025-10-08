@@ -12,8 +12,36 @@ public class EnemyShooter : EnemyBase
 
     protected override void PatrolTick()
     {
-        // ���� ���� ��� Waypoints (��� ����� �����)
+        // אפשר לשלב כאן Waypoints (ראה הרחבה בהמשך)
         Stop();
+    }
+
+    // NEW: Strafe/Chase על ציר X בלי לרדת מהפלטפורמה
+    protected override void ChaseTick()
+    {
+        if (!target) { Stop(); return; }
+
+        Vector2 selfPos = transform.position;
+        Vector2 targetPos = target.position;
+        Vector2 chasePos = new Vector2(targetPos.x, selfPos.y);
+
+        if (!CanStepTowardsX(chasePos))
+        {
+            Stop();
+            return;
+        }
+
+        // שמירת מרחק נוח מהשחקן
+        float desiredSpacing = Mathf.Max(attackRange * 0.8f, 1.5f);
+        float dx = targetPos.x - selfPos.x;
+        float absDx = Mathf.Abs(dx);
+
+        if (absDx > desiredSpacing + 0.2f)
+            MoveTowards(chasePos);        // להתקרב
+        else if (absDx < desiredSpacing - 0.2f)
+            MoveTowards(new Vector2(selfPos.x - Mathf.Sign(dx), selfPos.y)); // להתרחק מעט
+        else
+            Stop();
     }
 
     protected override void AttackTick()

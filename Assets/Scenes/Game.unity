@@ -743,7 +743,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2855544352461444767, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
       propertyPath: state
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2855544352461444767, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
       propertyPath: target
@@ -759,6 +759,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2855544352461444767, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
       propertyPath: attackRange
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2855544352461444767, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
+      propertyPath: feetOffset.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2855544352461444767, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
+      propertyPath: feetOffset.y
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2855544352461444767, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
+      propertyPath: edgeCheckDown
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2855544352461444767, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
@@ -782,8 +794,24 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2855544352461444767, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
+      propertyPath: edgeCheckForward
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2855544352461444767, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
       propertyPath: waypointReachEps
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2855544352461444767, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
+      propertyPath: deathDestroyDelay
+      value: 0.86
+      objectReference: {fileID: 0}
+    - target: {fileID: 2855544352461444767, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
+      propertyPath: groundMask.m_Bits
+      value: 256
+      objectReference: {fileID: 0}
+    - target: {fileID: 2855544352461444767, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
+      propertyPath: wallCheckDistance
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 2855544352461444767, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
       propertyPath: detectionBoxSize.x
@@ -939,6 +967,10 @@ PrefabInstance:
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5270469281470655016, guid: fcf772efcb4537d4da14a488dafaf771, type: 3}
+      propertyPath: feetOffset.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5270469281470655016, guid: fcf772efcb4537d4da14a488dafaf771, type: 3}
       propertyPath: detectionRange
       value: 4
       objectReference: {fileID: 0}
@@ -957,6 +989,14 @@ PrefabInstance:
     - target: {fileID: 5270469281470655016, guid: fcf772efcb4537d4da14a488dafaf771, type: 3}
       propertyPath: useBoxDetection
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5270469281470655016, guid: fcf772efcb4537d4da14a488dafaf771, type: 3}
+      propertyPath: deathDestroyDelay
+      value: 0.86
+      objectReference: {fileID: 0}
+    - target: {fileID: 5270469281470655016, guid: fcf772efcb4537d4da14a488dafaf771, type: 3}
+      propertyPath: groundMask.m_Bits
+      value: 256
       objectReference: {fileID: 0}
     - target: {fileID: 5270469281470655016, guid: fcf772efcb4537d4da14a488dafaf771, type: 3}
       propertyPath: detectionBoxSize.x
@@ -4367,7 +4407,7 @@ Transform:
   m_GameObject: {fileID: 1892909215}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.54, y: 1.37, z: 0}
+  m_LocalPosition: {x: 0.2, y: 1.37, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4474,7 +4514,7 @@ Transform:
   m_GameObject: {fileID: 2147405597}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 8.18, y: 1.42, z: 0}
+  m_LocalPosition: {x: 7.53, y: 1.42, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

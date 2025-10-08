@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public abstract class EnemyBase : MonoBehaviour
+public abstract class EnemyBase : MonoBehaviour, IDamageable
 {
     public enum EnemyState { Patrol, Chase, Attack, Hurt, Dead }
 
@@ -11,7 +11,7 @@ public abstract class EnemyBase : MonoBehaviour
     [SerializeField] protected float attackRange = 4f;
 
     [Header("Detection Shape")]
-    [SerializeField] protected bool useBoxDetection = true; // �� true � ����� �����
+    [SerializeField] protected bool useBoxDetection = true; // אם true – נשתמש במלבן
     [SerializeField] protected Vector2 detectionBoxSize = new Vector2(8f, 4f);
     [SerializeField] protected Vector2 attackBoxSize = new Vector2(4f, 2f);
 
@@ -40,6 +40,14 @@ public abstract class EnemyBase : MonoBehaviour
     [SerializeField] protected SpriteRenderer spriteRenderer;
     [SerializeField] protected bool flipByVelocity = true;
     [SerializeField] protected bool facingRightDefault = true;
+
+    // ======== NEW: Tilemap-ground edge/wall checks ========
+    [Header("Ground / Edges (Tilemap)")]
+    [SerializeField] protected LayerMask groundMask;            // Layer של ה-Tilemap (Ground)
+    [SerializeField] protected Vector2 feetOffset = new Vector2(0f, -0.5f);
+    [SerializeField] protected float edgeCheckForward = 0.45f;  // כמה קדימה לבדוק רצפה
+    [SerializeField] protected float edgeCheckDown = 0.9f;      // עומק הבדיקה למטה
+    [SerializeField] protected float wallCheckDistance = 0.25f; // מרחק בדיקת קיר/עמוד קדימה
 
     // Animator hash references
     static readonly int HashSpeed = Animator.StringToHash("Speed");
@@ -77,6 +85,12 @@ public abstract class EnemyBase : MonoBehaviour
 
         if (state == EnemyState.Dead) { Stop(); return; }
 
+        if (state == EnemyState.Hurt)
+        {
+            Debug.Log("Update loop is correctly returning because state is Hurt.");
+            return;
+        }
+
         if (GameManager.I &&
             (GameManager.I.State == GameManager.GameState.Pause ||
              GameManager.I.State == GameManager.GameState.Dialogue ||
@@ -85,8 +99,6 @@ public abstract class EnemyBase : MonoBehaviour
             Stop();
             return;
         }
-
-        if (state == EnemyState.Hurt) return;
 
         if (InRange(attackRange)) ChangeState(EnemyState.Attack);
         else if (InRange(detectionRange)) ChangeState(EnemyState.Chase);
@@ -100,7 +112,7 @@ public abstract class EnemyBase : MonoBehaviour
         }
     }
 
-    // ====== ����� ���� �� �� ����� ======
+    // ====== זיהוי טווח עם קו ראייה ======
     protected bool InRange(float range)
     {
         if (!target) return false;
@@ -108,7 +120,7 @@ public abstract class EnemyBase : MonoBehaviour
         Vector2 selfPos = transform.position;
         Vector2 targetPos = target.position;
 
-        // ����� �� ����� ���� ����� �����
+        // בדיקה אם השחקן בכלל בטווח הצורה
         bool insideRange = false;
 
         if (!useBoxDetection)
@@ -126,11 +138,11 @@ public abstract class EnemyBase : MonoBehaviour
 
         if (!insideRange) return false;
 
-        // ����� �� �� ��� ��� ����� �����
+        // בדיקה אם יש קיר בין האויב לשחקן
         RaycastHit2D hit = Physics2D.Linecast(selfPos, targetPos, obstacleMask);
         if (hit.collider != null)
         {
-            // �� �� ������� ���� �����
+            // אם יש אובייקט חוסם ראייה
             return false;
         }
 
@@ -184,7 +196,8 @@ public abstract class EnemyBase : MonoBehaviour
                 break;
 
             case EnemyState.Hurt:
-                Stop();
+                Debug.Log("--- STEP 3: OnEnter(Hurt) was called. Setting animation trigger. ---");
+                //Stop();
                 if (animator) animator.SetTrigger(HashHurt);
                 break;
 
@@ -217,34 +230,56 @@ public abstract class EnemyBase : MonoBehaviour
     protected virtual void ChaseTick() { if (target) MoveTowards(target.position); }
     protected abstract void AttackTick();
 
+    public void Kill()
+    {
+        // אם האויב כבר בתהליך מוות, אל תתחיל אותו שוב
+        if (state == EnemyState.Dead) return;
+
+        // קרא ישירות לקורוטינה שמפעילה את אנימציית המוות וההשמדה
+        StartCoroutine(DieRoutine());
+    }
+
     public virtual void TakeDamage(int amount)
     {
-        if (state == EnemyState.Dead || _invulnerable) return;
+        if (state == EnemyState.Dead || _invulnerable)
+        {
+            Debug.LogWarning("TakeDamage BLOCKED. State: " + state + ", IsInvulnerable: " + _invulnerable);
+            return;
+        }
 
+        Debug.Log("--- STEP 1: TakeDamage Called ---");
         _health -= Mathf.Max(1, amount);
+
         if (_health <= 0)
         {
             StartCoroutine(DieRoutine());
             return;
         }
 
-        StartCoroutine(HurtRoutine());
-    }
-
-    IEnumerator HurtRoutine()
-    {
         _invulnerable = true;
         ChangeState(EnemyState.Hurt);
-        yield return new WaitForSeconds(hurtDuration);
-        _invulnerable = false;
+        Debug.Log("--- STEP 2: State changed to Hurt. Starting HurtRoutine. ---");
+        StartCoroutine(HurtEndRoutine());
+    }
 
-        if (InRange(attackRange)) ChangeState(EnemyState.Attack);
-        else if (InRange(detectionRange)) ChangeState(EnemyState.Chase);
-        else ChangeState(EnemyState.Patrol);
+    IEnumerator HurtEndRoutine()
+    {
+        Debug.Log("--- STEP 4: HurtEndRoutine has started, waiting for " + hurtDuration + " seconds. ---");
+        yield return new WaitForSeconds(hurtDuration);
+        Debug.Log("--- STEP 5: HurtEndRoutine has finished waiting. Resetting state. ---");
+
+        _invulnerable = false;
+        if (state == EnemyState.Hurt)
+        {
+            if (InRange(attackRange)) ChangeState(EnemyState.Attack);
+            else if (InRange(detectionRange)) ChangeState(EnemyState.Chase);
+            else ChangeState(EnemyState.Patrol);
+        }
     }
 
     IEnumerator DieRoutine()
     {
+        Debug.Log("DieRoutine has been called for: " + gameObject.name);
         ChangeState(EnemyState.Dead);
         yield return new WaitForSeconds(deathDestroyDelay);
         Destroy(gameObject);
@@ -280,4 +315,42 @@ public abstract class EnemyBase : MonoBehaviour
             Gizmos.DrawWireSphere(transform.position, attackRange);
         }
     }
+
+    // ===================== Helpers for Tilemap-based movement safety =====================
+    /// <summary>החזרת סימן הכיוון לאובייקט יעד על ציר X</summary>
+    protected int HorizontalDirTo(Vector2 targetPos)
+    {
+        float dx = targetPos.x - transform.position.x;
+        if (dx > 0.01f) return 1;
+        if (dx < -0.01f) return -1;
+        return 0;
+    }
+
+    /// <summary>האם יש קיר/עמוד קדימה (על obstacleMask)?</summary>
+    protected bool HasWallAhead(int dirSign)
+    {
+        if (dirSign == 0) return false;
+        Vector2 origin = (Vector2)transform.position + feetOffset + new Vector2(dirSign * 0.1f, 0.1f);
+        return Physics2D.Raycast(origin, new Vector2(dirSign, 0f), wallCheckDistance, obstacleMask);
+    }
+
+    /// <summary>האם יש רצפה מתחת לנקודת הדריכה הבאה על ה-Tilemap (groundMask)?</summary>
+    protected bool HasGroundAhead(int dirSign)
+    {
+        if (dirSign == 0) return true;
+        Vector2 origin = (Vector2)transform.position + feetOffset + Vector2.right * (dirSign * edgeCheckForward);
+        RaycastHit2D hit = Physics2D.Raycast(origin, Vector2.down, edgeCheckDown, groundMask);
+        return hit.collider != null;
+    }
+
+    /// <summary>אפשר להתקדם צעד על ציר X מבלי ליפול/להיתקע?</summary>
+    protected bool CanStepTowardsX(Vector2 targetPos)
+    {
+        int s = HorizontalDirTo(targetPos);
+        if (s == 0) return true;
+        if (HasWallAhead(s)) return false;    // קיר/עמוד לפני האויב
+        if (!HasGroundAhead(s)) return false; // אין רצפה בהמשך — קצה פלטפורמה
+        return true;
+    }
+
 }
