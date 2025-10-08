@@ -5,8 +5,8 @@ public class EnemyMelee : EnemyBase
     [Header("Melee")]
     [SerializeField, Min(1)] private int meleeDamage = 12;
     [SerializeField, Min(0f)] private float meleeRange = 1.1f;   // טווח פגיעה
-    [SerializeField, Min(0f)] private float hitCooldown = 0.8f;   // שניות בין פגיעות
-    [SerializeField, Min(0f)] private float stopDistance = 0.6f;   // מרחק לעצירה לפני היעד
+    [SerializeField, Min(0f)] private float hitCooldown = 0.8f;  // שניות בין פגיעות
+    [SerializeField, Min(0f)] private float stopDistance = 0.6f; // מרחק לעצירה לפני היעד
 
     [Header("Patrol (Optional)")]
     [SerializeField] private Transform[] waypoints;
@@ -56,8 +56,7 @@ public class EnemyMelee : EnemyBase
         }
     }
 
-
-
+    // --- צ'ייס רק בציר X ---
     protected override void ChaseTick()
     {
         if (!target)
@@ -66,14 +65,20 @@ public class EnemyMelee : EnemyBase
             return;
         }
 
+        // נרדוף רק על ציר X: לוקחים את X של השחקן אבל משאירים את Y הנוכחי של האויב
+        Vector2 selfPos = transform.position;
+        Vector2 targetPos = target.position;
+        Vector2 chasePos = new Vector2(targetPos.x, selfPos.y);
+
         // מתקרבים עד מרחק עצירה (כדי לא "לרקוד" על הקוליידר של השחקן)
-        float dist = Vector2.Distance(transform.position, target.position);
-        if (dist > Mathf.Max(stopDistance, 0.01f))
-            MoveTowards(target.position);
+        float distX = Mathf.Abs(targetPos.x - selfPos.x);
+        if (distX > Mathf.Max(stopDistance, 0.01f))
+            MoveTowards(chasePos);
         else
             Stop();
     }
 
+    // --- גם בהתקפה ננעל על גובה האויב כדי לא לרחף ---
     protected override void AttackTick()
     {
         if (!target)
@@ -82,15 +87,23 @@ public class EnemyMelee : EnemyBase
             return;
         }
 
-        // נעמוד קרוב ליעד כדי להבטיח פגיעה
-        float dist = Vector2.Distance(transform.position, target.position);
-        if (dist > stopDistance) MoveTowards(target.position);
-        else Stop();
+        Vector2 selfPos = transform.position;
+        Vector2 targetPos = target.position;
+        Vector2 lockedPos = new Vector2(targetPos.x, selfPos.y); // נועל Y
+
+        // נעמוד קרוב ליעד כדי להבטיח פגיעה, אבל רק על ציר X
+        float distX = Mathf.Abs(targetPos.x - selfPos.x);
+        if (distX > stopDistance)
+            MoveTowards(lockedPos);
+        else
+            Stop();
 
         // קצב פגיעה
         _cooldown -= Time.deltaTime;
         if (_cooldown > 0f) return;
 
+        // בדיקת טווח פגיעה: נבדוק מרחק אמיתי אבל בדרך כלל עדיף להסתמך על טריגר/היטבוקס
+        float dist = Vector2.Distance(transform.position, target.position);
         if (dist <= meleeRange && target.TryGetComponent<IDamageable>(out var dmg))
         {
             dmg.TakeDamage(meleeDamage);

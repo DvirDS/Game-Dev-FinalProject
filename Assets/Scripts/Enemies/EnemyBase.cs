@@ -10,6 +10,15 @@ public abstract class EnemyBase : MonoBehaviour
     [SerializeField] protected float detectionRange = 8f;
     [SerializeField] protected float attackRange = 4f;
 
+    [Header("Detection Shape")]
+    [SerializeField] protected bool useBoxDetection = true; // אם true – נשתמש במלבן
+    [SerializeField] protected Vector2 detectionBoxSize = new Vector2(8f, 4f);
+    [SerializeField] protected Vector2 attackBoxSize = new Vector2(4f, 2f);
+
+    [Header("Line of Sight")]
+    [Tooltip("Layers that block enemy vision (e.g. Walls, Ground)")]
+    [SerializeField] protected LayerMask obstacleMask;
+
     [Header("Refs")]
     [SerializeField] protected Transform target;
     protected Rigidbody2D rb;
@@ -27,13 +36,12 @@ public abstract class EnemyBase : MonoBehaviour
     [Header("Animator")]
     [SerializeField] protected Animator animator;
 
-    // Sprite flipping
     [Header("Visual")]
     [SerializeField] protected SpriteRenderer spriteRenderer;
     [SerializeField] protected bool flipByVelocity = true;
     [SerializeField] protected bool facingRightDefault = true;
 
-    // Hashes
+    // Animator hash references
     static readonly int HashSpeed = Animator.StringToHash("Speed");
     static readonly int HashIsPatrolling = Animator.StringToHash("IsPatrolling");
     static readonly int HashIsChasing = Animator.StringToHash("IsChasing");
@@ -92,8 +100,42 @@ public abstract class EnemyBase : MonoBehaviour
         }
     }
 
-    protected bool InRange(float r) =>
-        target && Vector2.Distance(transform.position, target.position) <= r;
+    // ====== זיהוי טווח עם קו ראייה ======
+    protected bool InRange(float range)
+    {
+        if (!target) return false;
+
+        Vector2 selfPos = transform.position;
+        Vector2 targetPos = target.position;
+
+        // בדיקה אם השחקן בכלל בטווח הצורה
+        bool insideRange = false;
+
+        if (!useBoxDetection)
+        {
+            insideRange = Vector2.Distance(selfPos, targetPos) <= range;
+        }
+        else
+        {
+            Vector2 size = (range == attackRange) ? attackBoxSize : detectionBoxSize;
+            Vector2 half = size * 0.5f;
+            insideRange =
+                (targetPos.x >= selfPos.x - half.x && targetPos.x <= selfPos.x + half.x &&
+                 targetPos.y >= selfPos.y - half.y && targetPos.y <= selfPos.y + half.y);
+        }
+
+        if (!insideRange) return false;
+
+        // בדיקה אם יש קיר בין האויב לשחקן
+        RaycastHit2D hit = Physics2D.Linecast(selfPos, targetPos, obstacleMask);
+        if (hit.collider != null)
+        {
+            // אם יש אובייקט חוסם ראייה
+            return false;
+        }
+
+        return true;
+    }
 
     protected void MoveTowards(Vector2 pos)
     {
@@ -208,7 +250,6 @@ public abstract class EnemyBase : MonoBehaviour
         Destroy(gameObject);
     }
 
-    // ---- NEW: Flip sprite by velocity ----
     void UpdateFacingByVelocity()
     {
         if (!flipByVelocity || rb == null || !spriteRenderer) return;
@@ -217,21 +258,26 @@ public abstract class EnemyBase : MonoBehaviour
         if (Mathf.Abs(vx) < 0.01f) return;
 
         bool movingRight = vx > 0f;
-
-        // ??? ??: ??? ????? ?? ?????
         spriteRenderer.flipX = movingRight;
     }
 
-    // EnemyBase.cs
     void OnDrawGizmosSelected()
     {
-        // ???? ????? (????)
-        Gizmos.color = new Color(1f, 0.8f, 0f, 0.5f);
-        Gizmos.DrawWireSphere(transform.position, detectionRange);
+        if (useBoxDetection)
+        {
+            Gizmos.color = new Color(1f, 0.8f, 0f, 0.4f);
+            Gizmos.DrawWireCube(transform.position, detectionBoxSize);
 
-        // ???? ??÷?? (????)
-        Gizmos.color = new Color(1f, 0.2f, 0.2f, 0.5f);
-        Gizmos.DrawWireSphere(transform.position, attackRange);
+            Gizmos.color = new Color(1f, 0.2f, 0.2f, 0.4f);
+            Gizmos.DrawWireCube(transform.position, attackBoxSize);
+        }
+        else
+        {
+            Gizmos.color = new Color(1f, 0.8f, 0f, 0.5f);
+            Gizmos.DrawWireSphere(transform.position, detectionRange);
+
+            Gizmos.color = new Color(1f, 0.2f, 0.2f, 0.5f);
+            Gizmos.DrawWireSphere(transform.position, attackRange);
+        }
     }
-
 }
