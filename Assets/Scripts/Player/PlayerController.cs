@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerController : MonoBehaviour
@@ -34,6 +35,13 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+
+        if (Keyboard.current != null && Keyboard.current.hKey.wasPressedThisFrame)
+        {
+            GetComponent<Health>()?.TakeDamage(10);
+            Debug.Log("Player took 10 damage.");
+        }
+
         grounded = IsGrounded();
 
         // קפיצה – נקלטה בלייט-אפדייט מה-InputReader כטריגר של פריים

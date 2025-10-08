@@ -32,9 +32,12 @@ public class MenuController : MonoBehaviour
         if (firstMainSelected != null)
             EventSystem.current?.SetSelectedGameObject(firstMainSelected);
     }
+
     public void PlayGame()
     {
         SceneManager.LoadScene("Game");
+        // הוסף את השורה הזו כדי לעדכן את מצב המשחק!
+        GameManager.I?.StartGame();
     }
 
     public void QuitGame()

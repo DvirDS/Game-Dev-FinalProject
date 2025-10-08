@@ -1,10 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
     [Header("HUD")]
     [SerializeField] private Slider healthBar;
+    [SerializeField] private TextMeshProUGUI healthText; 
     [SerializeField] private GameObject hudRoot;
 
     [Header("Screens")]
@@ -39,9 +41,14 @@ public class UIManager : MonoBehaviour
 
     public void UpdateHealth(int current, int max)
     {
-        if (!healthBar) return;
-        healthBar.maxValue = Mathf.Max(1, max);
-        healthBar.value = Mathf.Clamp(current, 0, max);
+        if (healthBar)
+        {
+            healthBar.maxValue = Mathf.Max(1, max);
+            healthBar.value = Mathf.Clamp(current, 0, max);
+        }
+
+        // הוסף את השורה הבאה כדי לעדכן את הטקסט
+        if (healthText) healthText.text = $"{current} / {max}";
     }
 
     // כפתור Resume בפאנל Pause (אם יש)

@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 6629061337107233106}
   - component: {fileID: -4861412984153120109}
   - component: {fileID: 619188919634978258}
-  - component: {fileID: 2839809009530655495}
   - component: {fileID: 6951922013034653274}
   m_Layer: 7
   m_Name: EnemyShooter
@@ -165,20 +164,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.26, y: 0.27}
   m_EdgeRadius: 0
---- !u!114 &2839809009530655495
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 45199354173480711}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dcf1bd8b08721fa499135e87d885f641, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 100
-  isPlayer: 0
 --- !u!114 &6951922013034653274
 MonoBehaviour:
   m_ObjectHideFlags: 0

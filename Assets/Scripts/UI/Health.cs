@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Health : MonoBehaviour
+public class Health : MonoBehaviour, IDamageable
 {
     [SerializeField, Min(1)] private int maxHealth = 100;
     [SerializeField] private bool isPlayer;
@@ -9,6 +9,16 @@ public class Health : MonoBehaviour
     public int Current { get; private set; }
 
     void Awake() => Current = maxHealth;
+
+    void Start()
+    {
+        // זה החלק החסר!
+        // הוא מעדכן את ה-UI עם כמות החיים המלאה ברגע שהמשחק מתחיל
+        if (isPlayer)
+        {
+            GameManager.I?.NotifyPlayerHealth(Current, maxHealth);
+        }
+    }
 
     public void Heal(int amount)
     {
