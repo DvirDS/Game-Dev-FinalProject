@@ -4052,6 +4052,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPC
       objectReference: {fileID: 0}
+    - target: {fileID: 8866992286173032203, guid: e7e5cfae13aa9d34bbf91d77a43fff3a, type: 3}
+      propertyPath: m_text
+      value: 'Press [ F ]'
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8096668781271085527, guid: e7e5cfae13aa9d34bbf91d77a43fff3a, type: 3}
     m_RemovedGameObjects: []
