@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Shotgun
   m_EditorClassIdentifier: 
   displayName: Shotgun
+  price: 300
   icon: {fileID: 0}
   damage: 7
   fireRate: 1

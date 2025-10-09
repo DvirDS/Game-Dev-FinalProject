@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,6 +18,11 @@ public class GameManager : MonoBehaviour
     public event Action<GameState> OnStateChanged;
     public event Action<int, int> OnPlayerHealthChanged; // current, max
     public event Action OnWeaponSwitched;
+
+    public int Score { get; private set; }
+    public event Action<int> OnScoreChanged;
+
+    public List<WeaponData> PlayerOwnedWeapons { get; set; } = new List<WeaponData>();
 
     void Awake()
     {
@@ -47,6 +53,21 @@ public class GameManager : MonoBehaviour
         OnPlayerHealthChanged?.Invoke(current, max);
         if (current <= 0 && state != GameState.GameOver)
             GameOver();
+    }
+
+    public void AddScore(int amount)
+    {
+        if (amount <= 0) return;
+        Score += amount;
+        OnScoreChanged?.Invoke(Score);
+    }
+
+    public void DeductScore(int amount)
+    {
+        if (amount <= 0) return;
+        Score -= amount;
+        if (Score < 0) Score = 0;
+        OnScoreChanged?.Invoke(Score);
     }
 
     // ----- Weapon switch notification -----

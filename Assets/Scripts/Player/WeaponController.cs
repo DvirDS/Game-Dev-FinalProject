@@ -26,6 +26,7 @@ public class WeaponController : MonoBehaviour
     [SerializeField] private float muzzleFlashAutoHideDelay = 0.08f;
 
     [Header("Inventory")]
+    [SerializeField] private WeaponData startingWeapon;
     [SerializeField] private List<WeaponData> loadout = new();
     private int currentIndex;
     private float fireCooldown;
@@ -42,6 +43,32 @@ public class WeaponController : MonoBehaviour
     private void Awake()
     {
         if (!input) input = GetComponentInParent<PlayerInputReader>();
+    }
+
+    // WeaponController.cs
+
+    void Start()
+    {
+        loadout.Clear();
+
+        // בדוק אם יש נשקים שמורים מהשלב הקודם
+        if (GameManager.I != null && GameManager.I.PlayerOwnedWeapons.Count > 0)
+        {
+            // טען את הנשקים השמורים
+            foreach (var weapon in GameManager.I.PlayerOwnedWeapons)
+            {
+                AddWeapon(weapon, false);
+            }
+            EquipWeapon(0); // צייד את הנשק הראשון ברשימה
+        }
+        else
+        {
+            // אם אין נשקים שמורים (שלב ראשון), תן את הנשק ההתחלתי
+            if (startingWeapon != null)
+            {
+                AddWeapon(startingWeapon, true);
+            }
+        }
     }
 
     private void Update()
@@ -179,11 +206,19 @@ public class WeaponController : MonoBehaviour
     }
 
     // -------- Inventory --------
+
+    private void EquipWeapon(int index)
+    {
+        if (index < 0 || index >= loadout.Count) return;
+
+        currentIndex = index;
+        GameManager.I?.NotifyWeaponSwitched();
+    }
     private void Switch(int dir)
     {
         if (loadout.Count <= 1) return;
-        currentIndex = (currentIndex + dir + loadout.Count) % loadout.Count;
-        GameManager.I?.NotifyWeaponSwitched();
+        int newIndex = (currentIndex + dir + loadout.Count) % loadout.Count;
+        EquipWeapon(newIndex);
     }
 
     public void AddWeapon(WeaponData data, bool switchToNew = false)
@@ -192,6 +227,14 @@ public class WeaponController : MonoBehaviour
         loadout.Add(data);
         if (switchToNew) currentIndex = loadout.Count - 1;
         GameManager.I?.NotifyWeaponSwitched();
+    }
+
+    public void SaveWeaponsToGameManager()
+    {
+        if (GameManager.I != null)
+        {
+            GameManager.I.PlayerOwnedWeapons = new List<WeaponData>(loadout); 
+        }
     }
 
     public WeaponData Current => loadout.Count > 0 ? loadout[currentIndex] : null;

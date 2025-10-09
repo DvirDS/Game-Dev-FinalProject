@@ -6,6 +6,7 @@ public class WeaponData : ScriptableObject
 {
     [Header("Meta")]
     public string displayName;
+    public int price = 100;
     public Sprite icon;
 
     [Header("Stats")]

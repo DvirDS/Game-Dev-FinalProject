@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: SMG
   m_EditorClassIdentifier: 
   displayName: SMG
+  price: 700
   icon: {fileID: 0}
   damage: 5
   fireRate: 6

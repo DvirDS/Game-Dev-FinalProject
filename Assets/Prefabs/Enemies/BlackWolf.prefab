@@ -179,6 +179,7 @@ MonoBehaviour:
   moveSpeed: 3
   detectionRange: 8
   attackRange: 4
+  scoreValue: 200
   useBoxDetection: 1
   detectionBoxSize: {x: 8, y: 4}
   attackBoxSize: {x: 4, y: 3}

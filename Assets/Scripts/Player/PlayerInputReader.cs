@@ -10,9 +10,8 @@ public class PlayerInputReader : MonoBehaviour
     public bool SwitchPrevPressed { get; private set; }
     public bool InteractPressed { get; private set; }
 
-    // חדש: קפיצה וספרינט
-    public bool JumpPressed { get; private set; }     // אירוע חד-פעמי לפריים
-    public bool SprintHeld { get; private set; }     // מוחזק/לא מוחזק
+    public bool JumpPressed { get; private set; }    
+    public bool SprintHeld { get; private set; }  
 
     void Awake()
     {
@@ -28,7 +27,6 @@ public class PlayerInputReader : MonoBehaviour
         _actions.Player.SwitchPrev.performed += _ => SwitchPrevPressed = true;
         _actions.Player.Interact.performed += _ => InteractPressed = true;
 
-        // חדש: Jump + Sprint
         _actions.Player.Jump.performed += _ => JumpPressed = true;
         _actions.Player.Sprint.performed += _ => SprintHeld = true;
         _actions.Player.Sprint.canceled += _ => SprintHeld = false;
@@ -39,7 +37,6 @@ public class PlayerInputReader : MonoBehaviour
 
     void LateUpdate()
     {
-        // איפוס טריגרים של פריים אחד
         SwitchNextPressed = false;
         SwitchPrevPressed = false;
         InteractPressed = false;

@@ -11,6 +11,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] protected float moveSpeed = 3f;
     [SerializeField] protected float detectionRange = 8f;
     [SerializeField] protected float attackRange = 4f;
+    [SerializeField, Min(0)] protected int scoreValue = 10;
 
     [Header("Detection Shape")]
     [SerializeField] protected bool useBoxDetection = true; 
@@ -247,10 +248,12 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
     IEnumerator DieRoutine()
     {
+        GameManager.I?.AddScore(scoreValue);
         Debug.Log("DieRoutine has been called for: " + gameObject.name);
         ChangeState(EnemyState.Dead);
         yield return new WaitForSeconds(deathDestroyDelay);
         Destroy(gameObject);
+        
     }
 
     void UpdateFacingByVelocity()
