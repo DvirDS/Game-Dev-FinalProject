@@ -29,13 +29,13 @@ public class NPCShop : MonoBehaviour
     public void OpenShop()
     {
         if (shopPanel) shopPanel.SetActive(true);
-        Time.timeScale = 0f;
+        GameManager.I?.SetState(GameManager.GameState.Dialogue);
     }
 
     public void CloseShop()
     {
         if (shopPanel) shopPanel.SetActive(false);
-        Time.timeScale = 1f;
+        GameManager.I?.ResumeGame();
     }
 
     public void PurchaseWeapon(int weaponIndex)

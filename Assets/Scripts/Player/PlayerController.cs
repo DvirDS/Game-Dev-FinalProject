@@ -30,11 +30,15 @@ public class PlayerController : MonoBehaviour
         if (!sprite) sprite = GetComponent<SpriteRenderer>();
 
         rb.freezeRotation = true;
-        // מומלץ: Gravity Scale 3–7, Linear Drag = 0 בריגידבודי
     }
 
     void Update()
     {
+        if (GameManager.I != null && GameManager.I.State != GameManager.GameState.Play)
+        {
+            if (rb) rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+            return; 
+        }
 
         if (Keyboard.current != null && Keyboard.current.hKey.wasPressedThisFrame)
         {
@@ -62,6 +66,10 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (GameManager.I != null && GameManager.I.State != GameManager.GameState.Play)
+        {
+            return;
+        }
         float speed = baseSpeed * (input.SprintHeld ? 1.5f : 1f);
         float x = input.Move.x;
         float targetVx = Mathf.Abs(x) > 0.01f ? Mathf.Sign(x) * speed : 0f;

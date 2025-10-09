@@ -8,6 +8,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Slider healthBar;
     [SerializeField] private TextMeshProUGUI healthText; 
     [SerializeField] private GameObject hudRoot;
+    [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private TextMeshProUGUI shopScoreText;
 
     [Header("Screens")]
     [SerializeField] private GameObject pausePanel;
@@ -19,6 +21,7 @@ public class UIManager : MonoBehaviour
         {
             GameManager.I.OnPlayerHealthChanged += UpdateHealth;
             GameManager.I.OnStateChanged += HandleGameStateChanged;
+            GameManager.I.OnScoreChanged += UpdateScore;
         }
     }
 
@@ -28,6 +31,7 @@ public class UIManager : MonoBehaviour
         {
             GameManager.I.OnPlayerHealthChanged -= UpdateHealth;
             GameManager.I.OnStateChanged -= HandleGameStateChanged;
+            GameManager.I.OnScoreChanged -= UpdateScore;
         }
     }
 
@@ -37,6 +41,10 @@ public class UIManager : MonoBehaviour
         if (hudRoot) hudRoot.SetActive(inPlay);
         if (pausePanel) pausePanel.SetActive(s == GameManager.GameState.Pause);
         if (gameOverPanel) gameOverPanel.SetActive(s == GameManager.GameState.GameOver);
+        if (inPlay)
+        {
+            UpdateScore(GameManager.I.Score);
+        }
     }
 
     public void UpdateHealth(int current, int max)
@@ -47,10 +55,25 @@ public class UIManager : MonoBehaviour
             healthBar.value = Mathf.Clamp(current, 0, max);
         }
 
-        // הוסף את השורה הבאה כדי לעדכן את הטקסט
         if (healthText) healthText.text = $"{current} / {max}";
     }
 
-    // כפתור Resume בפאנל Pause (אם יש)
+    private void UpdateScore(int newScore)
+    {
+        string scoreString = "Score: " + newScore;
+
+        // Update the main HUD score
+        if (scoreText)
+        {
+            scoreText.text = scoreString;
+        }
+
+        // Also update the shop score
+        if (shopScoreText)
+        {
+            shopScoreText.text = scoreString;
+        }
+    }
+
     public void OnResumeClicked() => GameManager.I?.ResumeGame();
 }

@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
         if (state == next) return;
         state = next;
         OnStateChanged?.Invoke(state);
-        Time.timeScale = (state == GameState.Pause || state == GameState.GameOver) ? 0f : 1f;
+        Time.timeScale = (state == GameState.Pause || state == GameState.GameOver || state == GameState.Dialogue) ? 0f : 1f;
     }
 
     // ----- Health bridge for UI -----

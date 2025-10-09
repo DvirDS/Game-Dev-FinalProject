@@ -249,7 +249,6 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     IEnumerator DieRoutine()
     {
         GameManager.I?.AddScore(scoreValue);
-        Debug.Log("DieRoutine has been called for: " + gameObject.name);
         ChangeState(EnemyState.Dead);
         yield return new WaitForSeconds(deathDestroyDelay);
         Destroy(gameObject);

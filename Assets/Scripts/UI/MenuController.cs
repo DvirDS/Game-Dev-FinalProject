@@ -36,8 +36,6 @@ public class MenuController : MonoBehaviour
     public void PlayGame()
     {
         SceneManager.LoadScene("Game");
-        // הוסף את השורה הזו כדי לעדכן את מצב המשחק!
-        GameManager.I?.StartGame();
     }
 
     public void QuitGame()

@@ -9,7 +9,7 @@ public class PlayerInputReader : MonoBehaviour
     public bool SwitchNextPressed { get; private set; }
     public bool SwitchPrevPressed { get; private set; }
     public bool InteractPressed { get; private set; }
-
+    public bool PausePressed { get; private set; }
     public bool JumpPressed { get; private set; }    
     public bool SprintHeld { get; private set; }  
 
@@ -30,6 +30,8 @@ public class PlayerInputReader : MonoBehaviour
         _actions.Player.Jump.performed += _ => JumpPressed = true;
         _actions.Player.Sprint.performed += _ => SprintHeld = true;
         _actions.Player.Sprint.canceled += _ => SprintHeld = false;
+        
+        _actions.Player.Pause.performed += _ => PausePressed = true;
     }
 
     void OnEnable() => _actions.Enable();
@@ -41,5 +43,6 @@ public class PlayerInputReader : MonoBehaviour
         SwitchPrevPressed = false;
         InteractPressed = false;
         JumpPressed = false;
+        PausePressed = false;
     }
 }

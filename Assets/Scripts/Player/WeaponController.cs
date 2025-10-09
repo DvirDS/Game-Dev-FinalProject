@@ -73,6 +73,11 @@ public class WeaponController : MonoBehaviour
 
     private void Update()
     {
+        // Add this check right here
+        if (GameManager.I != null && GameManager.I.State != GameManager.GameState.Play)
+        {
+            return; // Exit the function if the game is not in the "Play" state
+        }
         if (loadout.Count == 0) return;
 
         var w = loadout[currentIndex];
