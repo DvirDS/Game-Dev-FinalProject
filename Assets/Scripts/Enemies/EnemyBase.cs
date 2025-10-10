@@ -3,7 +3,7 @@ using UnityEngine;
 
 public abstract class EnemyBase : MonoBehaviour, IDamageable
 {
-// 'Hurt' mechanic:** In this system, 'Hurt' is not a
+// 'Hurt' mechanic: In this system, 'Hurt' is not a
 // behavioral state in the main state machine. It is handled as a visual-only layer.
     public enum EnemyState { Patrol, Chase, Attack, Hurt, Dead }
 
@@ -44,7 +44,6 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] protected bool flipByVelocity = true;
     [SerializeField] protected bool facingRightDefault = true;
 
-    // ======== NEW: Tilemap-ground edge/wall checks ========
     [Header("Ground / Edges (Tilemap)")]
     [SerializeField] protected LayerMask groundMask;            
     [SerializeField] protected Vector2 feetOffset = new Vector2(0f, -0.5f);
@@ -52,7 +51,6 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] protected float edgeCheckDown = 0.9f;     
     [SerializeField] protected float wallCheckDistance = 0.25f; 
 
-    // Animator hash references
     static readonly int HashSpeed = Animator.StringToHash("Speed");
     static readonly int HashIsPatrolling = Animator.StringToHash("IsPatrolling");
     static readonly int HashIsChasing = Animator.StringToHash("IsChasing");
@@ -287,8 +285,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     }
 
 
-    // ===================== Helpers for Tilemap-based movement safety =====================
-
+    // Helpers for Tilemap-based movement safety
     // Returns the horizontal direction sign (1 for right, -1 for left) to a target position.
     protected int HorizontalDirTo(Vector2 targetPos)
     {

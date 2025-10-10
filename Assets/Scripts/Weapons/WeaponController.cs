@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 /// WeaponController:
 /// - Fires projectiles using the per-weapon muzzle (from WeaponVisualController).
@@ -9,14 +10,14 @@ using UnityEngine;
 public class WeaponController : MonoBehaviour
 {
     [Header("Firing Logic")]
-    [SerializeField] private LayerMask obstacleMask; //  נוסיף את זה. נגדיר ב-Inspector את שכבת הקירות
+    [SerializeField] private LayerMask obstacleMask; 
 
     [Header("Input / Owner")]
     [SerializeField] private PlayerInputReader input;
     [SerializeField] private string ownerTag = "Player";
 
     [Header("Visuals (per-weapon muzzle)")]
-    [SerializeField] private WeaponVisualController visuals;  // drag the component from Player
+    [SerializeField] private WeaponVisualController visuals; 
     [Tooltip("Fallback only: used if visuals or its CurrentMuzzle is missing")]
     [SerializeField] private Transform muzzle;
 
@@ -32,38 +33,30 @@ public class WeaponController : MonoBehaviour
     private float fireCooldown;
     private bool prevFireHeld;
 
-    // -------- Utils --------
     private Transform GetMuzzle()
     {
         if (visuals && visuals.CurrentMuzzle) return visuals.CurrentMuzzle;
         return muzzle;
     }
 
-    // -------- Unity --------
     private void Awake()
     {
         if (!input) input = GetComponentInParent<PlayerInputReader>();
     }
 
-    // WeaponController.cs
-
     void Start()
     {
         loadout.Clear();
-
-        // בדוק אם יש נשקים שמורים מהשלב הקודם
         if (GameManager.I != null && GameManager.I.PlayerOwnedWeapons.Count > 0)
         {
-            // טען את הנשקים השמורים
             foreach (var weapon in GameManager.I.PlayerOwnedWeapons)
             {
                 AddWeapon(weapon, false);
             }
-            EquipWeapon(0); // צייד את הנשק הראשון ברשימה
+            EquipWeapon(0);
         }
         else
         {
-            // אם אין נשקים שמורים (שלב ראשון), תן את הנשק ההתחלתי
             if (startingWeapon != null)
             {
                 AddWeapon(startingWeapon, true);
@@ -73,10 +66,9 @@ public class WeaponController : MonoBehaviour
 
     private void Update()
     {
-        // Add this check right here
         if (GameManager.I != null && GameManager.I.State != GameManager.GameState.Play)
         {
-            return; // Exit the function if the game is not in the "Play" state
+            return;
         }
         if (loadout.Count == 0) return;
 
@@ -99,33 +91,21 @@ public class WeaponController : MonoBehaviour
         prevFireHeld = input.FireHeld;
     }
 
-    // -------- Firing --------
     private void Fire(WeaponData w)
     {
         var m = GetMuzzle();
         if (!m || !w || !w.projectilePrefab) return;
 
-        // --- התוספת החדשה מתחילה כאן ---
+        Vector2 raycastOrigin = transform.position; 
 
-        // 1. קבע נקודת התחלה בטוחה ל-Raycast (מרכז השחקן או בסיס הנשק)
-        Vector2 raycastOrigin = transform.position; // או מיקום אחר שאתה יודע שהוא לא בתוך קיר
-
-        // 2. קבע את היעד - המיקום המקורי של הלוע
         Vector2 targetMuzzlePos = m.position;
 
-        // 3. חשב את הכיוון והמרחק
         Vector2 directionToMuzzle = targetMuzzlePos - raycastOrigin;
         float distanceToMuzzle = directionToMuzzle.magnitude;
 
-        // 4. בצע את ה-Raycast
         RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, directionToMuzzle.normalized, distanceToMuzzle, obstacleMask);
 
-        // 5. קבע את מיקום היצירה הסופי של הכדור
-        // השורה החדשה והמשופרת:
         Vector3 spawnPosition = hit.collider ? (Vector3)(hit.point + hit.normal * 0.01f) : m.position;
-
-        // --- סוף התוספת ---
-
 
         int count = Mathf.Max(1, w.bulletsPerShot);
         float totalSpread = Mathf.Max(0f, w.spreadAngle);
@@ -138,7 +118,6 @@ public class WeaponController : MonoBehaviour
         {
             float ang = (totalSpread > 0f) ? Random.Range(-halfSpread, halfSpread) : 0f;
             Quaternion spreadRot = Quaternion.AngleAxis(ang, Vector3.forward);
-            //               שינוי כאן vvvvvvvvvvvv
             ShootOne(w, spawnPosition, m.rotation, spreadRot * baseDir);
         }
         else
@@ -148,11 +127,9 @@ public class WeaponController : MonoBehaviour
             {
                 float ang = -halfSpread + step * i;
                 Quaternion spreadRot = Quaternion.AngleAxis(ang, Vector3.forward);
-                //               שינוי כאן vvvvvvvvvvvv
                 ShootOne(w, spawnPosition, m.rotation, spreadRot * baseDir);
             }
         }
-
         PlayMuzzleFlash();
     }
 
@@ -179,10 +156,8 @@ public class WeaponController : MonoBehaviour
         }
     }
 
-    // -------- Muzzle Flash --------
     private void PlayMuzzleFlash()
     {
-        // Always fetch the animator from the *current* muzzle, in case weapon changed.
         Animator anim = null;
         var m = GetMuzzle();
         if (m) anim = m.GetComponentInChildren<Animator>(true);
@@ -209,8 +184,6 @@ public class WeaponController : MonoBehaviour
             if (sr) sr.enabled = false;
         }
     }
-
-    // -------- Inventory --------
 
     private void EquipWeapon(int index)
     {

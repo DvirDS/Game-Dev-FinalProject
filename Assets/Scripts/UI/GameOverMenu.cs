@@ -1,10 +1,10 @@
-// GameOverMenu.cs
+
 using UnityEngine;
 
 public class GameOverMenu : MonoBehaviour
 {
     [SerializeField] private SceneLoader loader;
-    [SerializeField] private string mainMenuScene = "MainMenu";
+    [SerializeField] private string mainMenuScene = "StartMenu";
 
     public void OnRetry()
     {

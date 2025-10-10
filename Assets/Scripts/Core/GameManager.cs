@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
 
     // Events
     public event Action<GameState> OnStateChanged;
-    public event Action<int, int> OnPlayerHealthChanged; // current, max
+    public event Action<int, int> OnPlayerHealthChanged;
     public event Action OnWeaponSwitched;
 
     public int Score { get; private set; }

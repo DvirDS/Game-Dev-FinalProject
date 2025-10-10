@@ -7,7 +7,6 @@ public class InputHandler : MonoBehaviour
     // We subscribe to the GameManager's event when this object is enabled
     void OnEnable()
     {
-        // It's good practice to wait for the instance to be ready
         if (GameManager.I != null)
         {
             GameManager.I.OnStateChanged += HandleGameStateChange;
@@ -44,10 +43,6 @@ public class InputHandler : MonoBehaviour
         {
             // The game is now in the 'Play' state! THIS is the time to find the player's input.
             inputReader = FindAnyObjectByType<PlayerInputReader>();
-            if (inputReader == null)
-            {
-                Debug.LogError("FATAL: InputHandler could not find a PlayerInputReader when entering Play state!");
-            }
         }
         else
         {
@@ -58,7 +53,6 @@ public class InputHandler : MonoBehaviour
 
     void Update()
     {
-        // The rest of the code is the same, but now it's much safer.
         // The 'inputReader' variable will only have a value when we are in the Play state.
         if (inputReader != null && inputReader.PausePressed)
         {
