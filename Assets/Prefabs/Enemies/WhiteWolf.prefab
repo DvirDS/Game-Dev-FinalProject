@@ -34,7 +34,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2855544352461444767, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
       propertyPath: meleeRange
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2855544352461444767, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
       propertyPath: scoreValue
@@ -81,6 +81,10 @@ PrefabInstance:
       value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 2855544352461444767, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
+      propertyPath: detectionBoxSize.y
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2855544352461444767, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
       propertyPath: facingRightDefault
       value: 1
       objectReference: {fileID: 0}
@@ -102,7 +106,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3257369963283807632, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -20.33286
+      value: -30.52
       objectReference: {fileID: 0}
     - target: {fileID: 3257369963283807632, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
       propertyPath: m_LocalPosition.y

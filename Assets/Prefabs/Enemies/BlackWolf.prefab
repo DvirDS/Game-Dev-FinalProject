@@ -176,21 +176,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc5c2f61a69b5e0459122a1d4d30c15e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 3
-  detectionRange: 8
-  attackRange: 4
+  moveSpeed: 6
+  detectionRange: 6
+  attackRange: 2
   scoreValue: 200
   useBoxDetection: 1
-  detectionBoxSize: {x: 8, y: 4}
+  detectionBoxSize: {x: 15, y: 3}
   attackBoxSize: {x: 4, y: 3}
   obstacleMask:
     serializedVersion: 2
     m_Bits: 256
-  target: {fileID: 7523331421300402640, guid: f9c97aa48105eef41b9a9cf5c58f7c43, type: 3}
+  target: {fileID: 0}
   state: 0
   maxHealth: 40
   hurtDuration: 0.2
-  deathDestroyDelay: 1.5
+  deathDestroyDelay: 0.86
   animator: {fileID: 7751223663916845615}
   spriteRenderer: {fileID: 5807881605182105639}
   flipByVelocity: 1
@@ -198,12 +198,12 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 256
-  feetOffset: {x: 0, y: 0}
-  edgeCheckForward: 0.45
-  edgeCheckDown: 0.9
-  wallCheckDistance: 0.25
+  feetOffset: {x: 0, y: -0.5}
+  edgeCheckForward: 0.5
+  edgeCheckDown: 2
+  wallCheckDistance: 0.3
   meleeDamage: 20
-  meleeRange: 3
+  meleeRange: 2
   hitCooldown: 0.8
   stopDistance: 0.6
   waypoints:

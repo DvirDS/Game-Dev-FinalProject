@@ -284,10 +284,7 @@ MonoBehaviour:
   muzzleFlashStateName: MuzzleFlash
   muzzleFlashNormallyHidden: 1
   muzzleFlashAutoHideDelay: 0.1
-  loadout:
-  - {fileID: 11400000, guid: a41db8a0d25f2ec4badbf4a9385d40c2, type: 2}
-  - {fileID: 11400000, guid: 84bdeafda789e39468457287ed921e66, type: 2}
-  - {fileID: 11400000, guid: a44ab120c58980b45b0c4693b1051915, type: 2}
+  startingWeapon: {fileID: 11400000, guid: a41db8a0d25f2ec4badbf4a9385d40c2, type: 2}
 --- !u!114 &1698125991320905125
 MonoBehaviour:
   m_ObjectHideFlags: 0
