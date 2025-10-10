@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject hudRoot;
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI shopScoreText;
+    [SerializeField] private TextMeshProUGUI ammoText;
 
     [Header("Screens")]
     [SerializeField] private GameObject pausePanel;
@@ -22,6 +23,7 @@ public class UIManager : MonoBehaviour
             GameManager.I.OnPlayerHealthChanged += UpdateHealth;
             GameManager.I.OnStateChanged += HandleGameStateChanged;
             GameManager.I.OnScoreChanged += UpdateScore;
+            GameManager.I.OnAmmoChanged += UpdateAmmo;
         }
     }
 
@@ -32,6 +34,7 @@ public class UIManager : MonoBehaviour
             GameManager.I.OnPlayerHealthChanged -= UpdateHealth;
             GameManager.I.OnStateChanged -= HandleGameStateChanged;
             GameManager.I.OnScoreChanged -= UpdateScore;
+            GameManager.I.OnAmmoChanged -= UpdateAmmo;
         }
     }
 
@@ -72,6 +75,21 @@ public class UIManager : MonoBehaviour
         if (shopScoreText)
         {
             shopScoreText.text = scoreString;
+        }
+    }
+
+    private void UpdateAmmo(int currentAmmo)
+    {
+        if (ammoText)
+        {
+            if (currentAmmo == -1) // -1 is our signal for infinite ammo
+            {
+                ammoText.text = "Ammo: --";
+            }
+            else
+            {
+                ammoText.text = "Ammo: " + currentAmmo;
+            }
         }
     }
 

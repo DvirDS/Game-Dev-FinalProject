@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
 
     public int Score { get; private set; }
     public event Action<int> OnScoreChanged;
+    public event Action<int> OnAmmoChanged;
 
     public List<WeaponData> PlayerOwnedWeapons { get; set; } = new List<WeaponData>();
 
@@ -74,5 +75,11 @@ public class GameManager : MonoBehaviour
     public void NotifyWeaponSwitched()
     {
         OnWeaponSwitched?.Invoke();
+    }
+
+    // Add this new function
+    public void NotifyAmmoChanged(int currentAmmo)
+    {
+        OnAmmoChanged?.Invoke(currentAmmo);
     }
 }
