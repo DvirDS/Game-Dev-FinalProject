@@ -3,21 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-/// WeaponController:
-/// - Fires projectiles using the per-weapon muzzle (from WeaponVisualController).
-/// - Rebinds muzzle-flash Animator per shot so it always matches the active weapon.
-/// - Handles weapon switching.
 public class WeaponController : MonoBehaviour
 {
+    private class OwnedWeapon
+    {
+        public WeaponData Data;
+        public int CurrentAmmo;
+
+        public OwnedWeapon(WeaponData data)
+        {
+            Data = data;
+            CurrentAmmo = data.ammoPerPurchase;
+        }
+    }
+
     [Header("Firing Logic")]
-    [SerializeField] private LayerMask obstacleMask; 
+    [SerializeField] private LayerMask obstacleMask;
 
     [Header("Input / Owner")]
     [SerializeField] private PlayerInputReader input;
     [SerializeField] private string ownerTag = "Player";
 
     [Header("Visuals (per-weapon muzzle)")]
-    [SerializeField] private WeaponVisualController visuals; 
+    [SerializeField] private WeaponVisualController visuals;
     [Tooltip("Fallback only: used if visuals or its CurrentMuzzle is missing")]
     [SerializeField] private Transform muzzle;
 
@@ -28,10 +36,12 @@ public class WeaponController : MonoBehaviour
 
     [Header("Inventory")]
     [SerializeField] private WeaponData startingWeapon;
-    [SerializeField] private List<WeaponData> loadout = new();
+    private List<OwnedWeapon> loadout = new();
     private int currentIndex;
     private float fireCooldown;
     private bool prevFireHeld;
+
+    public WeaponData Current => (loadout.Count > 0 && currentIndex < loadout.Count) ? loadout[currentIndex].Data : null;
 
     private Transform GetMuzzle()
     {
@@ -49,9 +59,9 @@ public class WeaponController : MonoBehaviour
         loadout.Clear();
         if (GameManager.I != null && GameManager.I.PlayerOwnedWeapons.Count > 0)
         {
-            foreach (var weapon in GameManager.I.PlayerOwnedWeapons)
+            foreach (var weaponData in GameManager.I.PlayerOwnedWeapons)
             {
-                AddWeapon(weapon, false);
+                loadout.Add(new OwnedWeapon(weaponData));
             }
             EquipWeapon(0);
         }
@@ -62,6 +72,7 @@ public class WeaponController : MonoBehaviour
                 AddWeapon(startingWeapon, true);
             }
         }
+        UpdateAmmoUI();
     }
 
     private void Update()
@@ -72,7 +83,8 @@ public class WeaponController : MonoBehaviour
         }
         if (loadout.Count == 0) return;
 
-        var w = loadout[currentIndex];
+        var currentOwnedWeapon = loadout[currentIndex];
+        var w = currentOwnedWeapon.Data;
         fireCooldown -= Time.deltaTime;
 
         if (input.SwitchNextPressed) Switch(+1);
@@ -83,34 +95,100 @@ public class WeaponController : MonoBehaviour
 
         if (wantsToFire && fireCooldown <= 0f)
         {
-            Fire(w);
-            float safeRate = Mathf.Max(w.fireRate, 0.01f);
-            fireCooldown = 1f / safeRate;
+            if (!w.hasInfiniteAmmo && currentOwnedWeapon.CurrentAmmo <= 0)
+            {
+                Debug.Log("Out of ammo for " + w.displayName);
+            }
+            else
+            {
+                Fire(w);
+
+                if (!w.hasInfiniteAmmo)
+                {
+                    currentOwnedWeapon.CurrentAmmo--;
+                }
+
+                float safeRate = Mathf.Max(w.fireRate, 0.01f);
+                fireCooldown = 1f / safeRate;
+                UpdateAmmoUI();
+            }
         }
 
         prevFireHeld = input.FireHeld;
     }
+
+    public void AddWeapon(WeaponData data, bool switchToNew = false)
+    {
+        if (!data) return;
+
+        OwnedWeapon existingWeapon = loadout.FirstOrDefault(w => w.Data == data);
+
+        if (existingWeapon != null)
+        {
+            existingWeapon.CurrentAmmo += data.ammoPerPurchase;
+        }
+        else
+        {
+            loadout.Add(new OwnedWeapon(data));
+            if (switchToNew)
+            {
+                EquipWeapon(loadout.Count - 1);
+            }
+        }
+        UpdateAmmoUI();
+    }
+
+    private void EquipWeapon(int index)
+    {
+        if (index < 0 || index >= loadout.Count) return;
+
+        currentIndex = index;
+        UpdateAmmoUI();
+        GameManager.I?.NotifyWeaponSwitched();
+    }
+
+    private void Switch(int dir)
+    {
+        if (loadout.Count <= 1) return;
+        int newIndex = (currentIndex + dir + loadout.Count) % loadout.Count;
+        EquipWeapon(newIndex);
+    }
+
+    private void UpdateAmmoUI()
+    {
+        int ammoToShow = 0;
+        if (Current != null)
+        {
+            ammoToShow = Current.hasInfiniteAmmo ? -1 : loadout[currentIndex].CurrentAmmo;
+        }
+        GameManager.I?.NotifyAmmoChanged(ammoToShow);
+    }
+
+    public void SaveWeaponsToGameManager()
+    {
+        if (GameManager.I != null)
+        {
+            // This is the corrected line
+            GameManager.I.PlayerOwnedWeapons = loadout.Select(w => w.Data).ToList();
+        }
+    }
+
+    // The duplicate "Current" property that was here has been removed.
 
     private void Fire(WeaponData w)
     {
         var m = GetMuzzle();
         if (!m || !w || !w.projectilePrefab) return;
 
-        Vector2 raycastOrigin = transform.position; 
-
+        Vector2 raycastOrigin = transform.position;
         Vector2 targetMuzzlePos = m.position;
-
         Vector2 directionToMuzzle = targetMuzzlePos - raycastOrigin;
         float distanceToMuzzle = directionToMuzzle.magnitude;
-
         RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, directionToMuzzle.normalized, distanceToMuzzle, obstacleMask);
-
         Vector3 spawnPosition = hit.collider ? (Vector3)(hit.point + hit.normal * 0.01f) : m.position;
-
         int count = Mathf.Max(1, w.bulletsPerShot);
         float totalSpread = Mathf.Max(0f, w.spreadAngle);
         float halfSpread = totalSpread * 0.5f;
-
         float sign = Mathf.Sign(m.lossyScale.x);
         Vector3 baseDir = (sign >= 0f) ? m.right : -m.right;
 
@@ -136,7 +214,6 @@ public class WeaponController : MonoBehaviour
     private void ShootOne(WeaponData w, Vector3 pos, Quaternion rot, Vector3 dir)
     {
         var go = Instantiate(w.projectilePrefab, pos, rot);
-
         if (go.TryGetComponent<Projectile>(out var proj))
         {
             proj.damage = w.damage;
@@ -184,36 +261,4 @@ public class WeaponController : MonoBehaviour
             if (sr) sr.enabled = false;
         }
     }
-
-    private void EquipWeapon(int index)
-    {
-        if (index < 0 || index >= loadout.Count) return;
-
-        currentIndex = index;
-        GameManager.I?.NotifyWeaponSwitched();
-    }
-    private void Switch(int dir)
-    {
-        if (loadout.Count <= 1) return;
-        int newIndex = (currentIndex + dir + loadout.Count) % loadout.Count;
-        EquipWeapon(newIndex);
-    }
-
-    public void AddWeapon(WeaponData data, bool switchToNew = false)
-    {
-        if (!data) return;
-        loadout.Add(data);
-        if (switchToNew) currentIndex = loadout.Count - 1;
-        GameManager.I?.NotifyWeaponSwitched();
-    }
-
-    public void SaveWeaponsToGameManager()
-    {
-        if (GameManager.I != null)
-        {
-            GameManager.I.PlayerOwnedWeapons = new List<WeaponData>(loadout); 
-        }
-    }
-
-    public WeaponData Current => loadout.Count > 0 ? loadout[currentIndex] : null;
 }

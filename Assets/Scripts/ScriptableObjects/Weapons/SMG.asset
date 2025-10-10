@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: SMG
   m_EditorClassIdentifier: 
   displayName: SMG
-  price: 700
+  price: 500
+  ammoPerPurchase: 50
   icon: {fileID: 0}
+  hasInfiniteAmmo: 0
   damage: 5
   fireRate: 6
   muzzleVelocity: 15

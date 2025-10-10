@@ -11,6 +11,7 @@ public class WeaponData : ScriptableObject
     public Sprite icon;
 
     [Header("Stats")]
+    public bool hasInfiniteAmmo = false;
     public int damage = 10;
     public float fireRate = 5f;
 

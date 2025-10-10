@@ -13,7 +13,10 @@ MonoBehaviour:
   m_Name: Pistol
   m_EditorClassIdentifier: 
   displayName: Pistol
+  price: 100
+  ammoPerPurchase: 30
   icon: {fileID: 0}
+  hasInfiniteAmmo: 1
   damage: 10
   fireRate: 1
   muzzleVelocity: 14
