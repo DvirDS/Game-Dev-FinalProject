@@ -9,7 +9,7 @@ public class NPCShop : MonoBehaviour
     [SerializeField] private GameObject interactionPrompt;
 
     private bool playerInRange = false;
-    private PlayerInputReader playerInput; // התייחסות לרכיב הקלט של השחקן
+    private PlayerInputReader playerInput; 
 
     void Start()
     {
@@ -19,7 +19,6 @@ public class NPCShop : MonoBehaviour
 
     void Update()
     {
-        // אם השחקן בטווח והוא לחץ על כפתור האינטראקציה...
         if (playerInRange && playerInput != null && playerInput.InteractPressed)
         {
             OpenShop();
@@ -28,9 +27,14 @@ public class NPCShop : MonoBehaviour
 
     public void OpenShop()
     {
-        if (shopPanel) shopPanel.SetActive(true);
+        if (shopPanel)
+        {
+            shopPanel.SetActive(true);
+            shopPanel.GetComponent<ShopPanelController>()?.Bind(this);
+        }
         GameManager.I?.SetState(GameManager.GameState.Dialogue);
     }
+
 
     public void CloseShop()
     {
@@ -43,7 +47,6 @@ public class NPCShop : MonoBehaviour
         if (weaponIndex < 0 || weaponIndex >= weaponsForSale.Count) return;
         WeaponData weaponToBuy = weaponsForSale[weaponIndex];
 
-        // נמצא את ה-WeaponController של השחקן
         var playerWeaponController = playerInput.GetComponent<WeaponController>();
         if (playerWeaponController == null) return;
 
@@ -63,7 +66,7 @@ public class NPCShop : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerInRange = true;
-            playerInput = other.GetComponent<PlayerInputReader>(); // שומרים את ההתייחסות לרכיב הקלט
+            playerInput = other.GetComponent<PlayerInputReader>(); 
             if (interactionPrompt) interactionPrompt.SetActive(true);
         }
     }
@@ -73,7 +76,7 @@ public class NPCShop : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerInRange = false;
-            playerInput = null; // מנקים את ההתייחסות
+            playerInput = null; 
             if (interactionPrompt) interactionPrompt.SetActive(false);
             CloseShop();
         }

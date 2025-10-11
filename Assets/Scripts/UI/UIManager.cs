@@ -24,6 +24,7 @@ public class UIManager : MonoBehaviour
             GameManager.I.OnStateChanged += HandleGameStateChanged;
             GameManager.I.OnScoreChanged += UpdateScore;
             GameManager.I.OnAmmoChanged += UpdateAmmo;
+            UpdateScore(GameManager.I.Score);
         }
     }
 
