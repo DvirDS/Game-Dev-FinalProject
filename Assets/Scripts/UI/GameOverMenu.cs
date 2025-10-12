@@ -9,7 +9,6 @@ public class GameOverMenu : MonoBehaviour
     public void OnRetry()
     {
         loader.LoadScene("Game");
-        GameManager.I?.StartGame();
     }
     public void OnMainMenu()
     {

@@ -59,9 +59,11 @@ public class WeaponController : MonoBehaviour
         loadout.Clear();
         if (GameManager.I != null && GameManager.I.PlayerOwnedWeapons.Count > 0)
         {
-            foreach (var weaponData in GameManager.I.PlayerOwnedWeapons)
+            foreach (var savedWeapon in GameManager.I.PlayerOwnedWeapons)
             {
-                loadout.Add(new OwnedWeapon(weaponData));
+                var weaponInstance = new OwnedWeapon(savedWeapon.Weapon);
+                weaponInstance.CurrentAmmo = savedWeapon.Ammo;
+                loadout.Add(weaponInstance);
             }
             EquipWeapon(0);
         }
@@ -144,6 +146,7 @@ public class WeaponController : MonoBehaviour
 
         currentIndex = index;
         UpdateAmmoUI();
+        // Optional, currently not used
         GameManager.I?.NotifyWeaponSwitched();
     }
 
@@ -168,12 +171,17 @@ public class WeaponController : MonoBehaviour
     {
         if (GameManager.I != null)
         {
-            // This is the corrected line
-            GameManager.I.PlayerOwnedWeapons = loadout.Select(w => w.Data).ToList();
+            GameManager.I.PlayerOwnedWeapons.Clear();
+            foreach (var ownedWeapon in loadout)
+            {
+                GameManager.I.PlayerOwnedWeapons.Add(new WeaponSaveData
+                {
+                    Weapon = ownedWeapon.Data,
+                    Ammo = ownedWeapon.CurrentAmmo
+                });
+            }
         }
     }
-
-    // The duplicate "Current" property that was here has been removed.
 
     private void Fire(WeaponData w)
     {

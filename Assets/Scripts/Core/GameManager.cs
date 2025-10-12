@@ -2,11 +2,18 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
+
+[System.Serializable]
+public class WeaponSaveData
+{
+    public WeaponData Weapon;
+    public int Ammo;
+}
+
 public class GameManager : MonoBehaviour
 {
     // Singleton
     public static GameManager I { get; private set; }
-    // Alias לשמירה על תאימות לקוד שקורא Instance
     public static GameManager Instance => I;
 
     // Game States
@@ -23,7 +30,7 @@ public class GameManager : MonoBehaviour
     public event Action<int> OnScoreChanged;
     public event Action<int> OnAmmoChanged;
 
-    public List<WeaponData> PlayerOwnedWeapons { get; set; } = new List<WeaponData>();
+    public List<WeaponSaveData> PlayerOwnedWeapons { get; set; } = new List<WeaponSaveData>();
 
     void Awake()
     {
@@ -33,7 +40,13 @@ public class GameManager : MonoBehaviour
     }
 
     // ----- State transitions -----
-    public void StartGame() => SetState(GameState.Play);
+    public void StartGame()
+    {
+        Score = 0;
+        OnScoreChanged?.Invoke(Score);
+        PlayerOwnedWeapons.Clear();
+        SetState(GameState.Play);
+    }
     public void PauseGame() => SetState(GameState.Pause);
     public void ResumeGame() => SetState(GameState.Play);
     public void OpenDialogue() => SetState(GameState.Dialogue);
@@ -71,15 +84,13 @@ public class GameManager : MonoBehaviour
         OnScoreChanged?.Invoke(Score);
     }
 
-    // ----- Weapon switch notification -----
-    public void NotifyWeaponSwitched()
-    {
-        OnWeaponSwitched?.Invoke();
-    }
-
-    // Add this new function
     public void NotifyAmmoChanged(int currentAmmo)
     {
         OnAmmoChanged?.Invoke(currentAmmo);
+    }
+
+    public void NotifyWeaponSwitched()
+    {
+        OnWeaponSwitched?.Invoke();
     }
 }

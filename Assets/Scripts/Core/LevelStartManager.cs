@@ -4,6 +4,10 @@ public class LevelStartManager : MonoBehaviour
 {
     void Start()
     {
-        GameManager.I?.StartGame();
+        // בצע את הפעולה רק אם הגענו לכאן מהתפריט הראשי
+        if (GameManager.I != null && GameManager.I.State == GameManager.GameState.MainMenu)
+        {
+            GameManager.I.StartGame();
+        }
     }
 }
