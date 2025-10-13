@@ -194,7 +194,7 @@ MonoBehaviour:
   animator: {fileID: 7751223663916845615}
   spriteRenderer: {fileID: 5807881605182105639}
   flipByVelocity: 1
-  facingRightDefault: 1
+  facingRightDefault: 0
   groundMask:
     serializedVersion: 2
     m_Bits: 256

@@ -261,7 +261,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         if (Mathf.Abs(vx) < 0.01f) return;
 
         bool movingRight = vx > 0f;
-        spriteRenderer.flipX = movingRight;
+        spriteRenderer.flipX = movingRight != facingRightDefault;
     }
 
     void OnDrawGizmosSelected()

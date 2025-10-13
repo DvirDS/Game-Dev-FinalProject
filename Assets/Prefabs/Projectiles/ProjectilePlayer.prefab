@@ -182,3 +182,4 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 384
   ownerTag: Player
+  rotateToDirection: 0
