@@ -1,59 +1,38 @@
 using UnityEngine;
+using UnityEngine.SceneManagement; 
 
 public class InputHandler : MonoBehaviour
 {
     private PlayerInputReader inputReader;
 
-    // We subscribe to the GameManager's event when this object is enabled
     void OnEnable()
     {
-        if (GameManager.I != null)
-        {
-            GameManager.I.OnStateChanged += HandleGameStateChange;
-        }
-        // If GameManager doesn't exist yet, we'll try again in Start
-        else
-        {
-            // This is a fallback, but OnEnable should be sufficient
-            Invoke(nameof(SubscribeToGameManager), 0.1f);
-        }
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    private void SubscribeToGameManager()
-    {
-        if (GameManager.I != null)
-        {
-            GameManager.I.OnStateChanged += HandleGameStateChange;
-        }
-    }
-
-    // Always unsubscribe when the object is disabled or destroyed
     void OnDisable()
     {
-        if (GameManager.I != null)
-        {
-            GameManager.I.OnStateChanged -= HandleGameStateChange;
-        }
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    // This function will be called automatically by the GameManager
-    private void HandleGameStateChange(GameManager.GameState newState)
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (newState == GameManager.GameState.Play)
+        if (GameManager.I != null && GameManager.I.State == GameManager.GameState.Play)
         {
-            // The game is now in the 'Play' state! THIS is the time to find the player's input.
             inputReader = FindAnyObjectByType<PlayerInputReader>();
-        }
-        else
-        {
-            // If we are not in the 'Play' state (e.g., back in MainMenu), clear the reference.
-            inputReader = null;
+            if (inputReader == null)
+            {
+                Debug.LogError("FATAL: InputHandler could not find a PlayerInputReader in the new scene!");
+            }
+            else
+            {
+                Debug.Log("InputHandler successfully found the new PlayerInputReader.");
+            }
         }
     }
 
     void Update()
     {
-        // The 'inputReader' variable will only have a value when we are in the Play state.
         if (inputReader != null && inputReader.PausePressed)
         {
             if (GameManager.I.State == GameManager.GameState.Play)
@@ -66,4 +45,5 @@ public class InputHandler : MonoBehaviour
             }
         }
     }
+
 }

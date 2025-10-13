@@ -1,14 +1,16 @@
-// ParallaxLayer2D.cs
 using UnityEngine;
 
 [ExecuteAlways]
+[DefaultExecutionOrder(100)]
 public class ParallaxLayer2D : MonoBehaviour
 {
-    public Camera cam;                       // אם ריק => ניקח Camera.main
-    [Tooltip("כמה השכבה זזה יחסית למצלמה. Far ~0.1-0.25, Mid ~0.4-0.6, Near ~0.75-0.9")]
+    public Camera cam;
     public Vector2 multiplier = new Vector2(0.25f, 0f);
-    [Tooltip("לנעול פרלקסה בציר Y (בדו־מימד צד)")]
     public bool lockY = true;
+
+    [Header("Pixel Snap (optional)")]
+    public bool pixelSnap = false;     
+    [Min(1f)] public float pixelsPerUnit = 16f;
 
     Vector3 startPos;
     Vector3 camStartPos;
@@ -23,11 +25,18 @@ public class ParallaxLayer2D : MonoBehaviour
     void LateUpdate()
     {
         if (!cam) { cam = Camera.main; if (!cam) return; }
-        // הפרש תזוזת המצלמה מאז ההתחלה
+
         Vector3 camDelta = cam.transform.position - camStartPos;
 
         float x = startPos.x + camDelta.x * multiplier.x;
         float y = startPos.y + (lockY ? 0f : camDelta.y * multiplier.y);
+
+        if (pixelSnap && pixelsPerUnit > 0f)
+        {
+            x = Mathf.Round(x * pixelsPerUnit) / pixelsPerUnit;
+            y = Mathf.Round(y * pixelsPerUnit) / pixelsPerUnit;
+        }
+
         transform.position = new Vector3(x, y, startPos.z);
     }
 }
