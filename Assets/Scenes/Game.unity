@@ -2068,6 +2068,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1490081513}
     - target: {fileID: 2855544352461444767, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
+      propertyPath: detectionBoxSize.y
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2855544352461444767, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
       propertyPath: 'waypoints.Array.data[0]'
       value: 
       objectReference: {fileID: 1892909216}
