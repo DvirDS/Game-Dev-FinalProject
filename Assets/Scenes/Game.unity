@@ -6888,7 +6888,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 45199354173480711, guid: 393a584cdde495f44a8151a5d0ed9e9b, type: 3}
       propertyPath: m_Name
-      value: EnemyShooter
+      value: Golem
       objectReference: {fileID: 0}
     - target: {fileID: 4119751382103987517, guid: 393a584cdde495f44a8151a5d0ed9e9b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6930,93 +6930,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6629061337107233106, guid: 393a584cdde495f44a8151a5d0ed9e9b, type: 3}
-      propertyPath: m_FlipX
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6951922013034653274, guid: 393a584cdde495f44a8151a5d0ed9e9b, type: 3}
       propertyPath: target
       value: 
       objectReference: {fileID: 1490081513}
     - target: {fileID: 6951922013034653274, guid: 393a584cdde495f44a8151a5d0ed9e9b, type: 3}
-      propertyPath: animator
-      value: 
-      objectReference: {fileID: 1547059028}
-    - target: {fileID: 6951922013034653274, guid: 393a584cdde495f44a8151a5d0ed9e9b, type: 3}
-      propertyPath: maxHealth
-      value: 500
-      objectReference: {fileID: 0}
-    - target: {fileID: 6951922013034653274, guid: 393a584cdde495f44a8151a5d0ed9e9b, type: 3}
-      propertyPath: attackRange
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6951922013034653274, guid: 393a584cdde495f44a8151a5d0ed9e9b, type: 3}
-      propertyPath: edgeCheckDown
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6951922013034653274, guid: 393a584cdde495f44a8151a5d0ed9e9b, type: 3}
-      propertyPath: detectionRange
+      propertyPath: stopDistance
       value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 6951922013034653274, guid: 393a584cdde495f44a8151a5d0ed9e9b, type: 3}
-      propertyPath: flipByVelocity
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6951922013034653274, guid: 393a584cdde495f44a8151a5d0ed9e9b, type: 3}
-      propertyPath: shotsPerSecond
-      value: 1.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 6951922013034653274, guid: 393a584cdde495f44a8151a5d0ed9e9b, type: 3}
-      propertyPath: spriteRenderer
-      value: 
-      objectReference: {fileID: 1547059032}
-    - target: {fileID: 6951922013034653274, guid: 393a584cdde495f44a8151a5d0ed9e9b, type: 3}
-      propertyPath: attackBoxSize.x
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 6951922013034653274, guid: 393a584cdde495f44a8151a5d0ed9e9b, type: 3}
-      propertyPath: attackBoxSize.y
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 6951922013034653274, guid: 393a584cdde495f44a8151a5d0ed9e9b, type: 3}
-      propertyPath: idleAtPointTime
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6951922013034653274, guid: 393a584cdde495f44a8151a5d0ed9e9b, type: 3}
-      propertyPath: useBoxDetection
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6951922013034653274, guid: 393a584cdde495f44a8151a5d0ed9e9b, type: 3}
-      propertyPath: edgeCheckForward
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6951922013034653274, guid: 393a584cdde495f44a8151a5d0ed9e9b, type: 3}
-      propertyPath: deathDestroyDelay
-      value: 0.94
-      objectReference: {fileID: 0}
-    - target: {fileID: 6951922013034653274, guid: 393a584cdde495f44a8151a5d0ed9e9b, type: 3}
-      propertyPath: groundMask.m_Bits
-      value: 256
-      objectReference: {fileID: 0}
-    - target: {fileID: 6951922013034653274, guid: 393a584cdde495f44a8151a5d0ed9e9b, type: 3}
-      propertyPath: wallCheckDistance
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6951922013034653274, guid: 393a584cdde495f44a8151a5d0ed9e9b, type: 3}
-      propertyPath: detectionBoxSize.x
-      value: 13
-      objectReference: {fileID: 0}
-    - target: {fileID: 6951922013034653274, guid: 393a584cdde495f44a8151a5d0ed9e9b, type: 3}
-      propertyPath: detectionBoxSize.y
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6951922013034653274, guid: 393a584cdde495f44a8151a5d0ed9e9b, type: 3}
-      propertyPath: facingRightDefault
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6951922013034653274, guid: 393a584cdde495f44a8151a5d0ed9e9b, type: 3}
-      propertyPath: waypoints.Array.size
-      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6951922013034653274, guid: 393a584cdde495f44a8151a5d0ed9e9b, type: 3}
       propertyPath: 'waypoints.Array.data[0]'
@@ -7031,16 +6951,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 393a584cdde495f44a8151a5d0ed9e9b, type: 3}
---- !u!95 &1547059028 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 135640591653969630, guid: 393a584cdde495f44a8151a5d0ed9e9b, type: 3}
-  m_PrefabInstance: {fileID: 1547059026}
-  m_PrefabAsset: {fileID: 0}
---- !u!212 &1547059032 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 6629061337107233106, guid: 393a584cdde495f44a8151a5d0ed9e9b, type: 3}
-  m_PrefabInstance: {fileID: 1547059026}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1573716385
 GameObject:
   m_ObjectHideFlags: 0
@@ -8599,7 +8509,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5270469281470655016, guid: fcf772efcb4537d4da14a488dafaf771, type: 3}
       propertyPath: feetOffset.y
-      value: 0
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5270469281470655016, guid: fcf772efcb4537d4da14a488dafaf771, type: 3}
       propertyPath: detectionRange

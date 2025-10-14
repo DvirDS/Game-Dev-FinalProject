@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6951922013034653274}
   - component: {fileID: 135640591653969630}
   m_Layer: 7
-  m_Name: EnemyShooter
+  m_Name: Golem
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -178,36 +178,42 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 3
-  detectionRange: 8
-  attackRange: 4
-  scoreValue: 20000
+  detectionRange: 7
+  attackRange: 5
+  scoreValue: 300
   useBoxDetection: 1
-  detectionBoxSize: {x: 8, y: 4}
-  attackBoxSize: {x: 4, y: 2}
+  detectionBoxSize: {x: 13, y: 2.6}
+  attackBoxSize: {x: 20, y: 6}
   obstacleMask:
     serializedVersion: 2
     m_Bits: 256
-  target: {fileID: 7523331421300402640, guid: f9c97aa48105eef41b9a9cf5c58f7c43, type: 3}
+  target: {fileID: 0}
   state: 0
-  maxHealth: 20
+  maxHealth: 80
   hurtDuration: 0.2
-  deathDestroyDelay: 1.5
-  animator: {fileID: 0}
-  spriteRenderer: {fileID: 0}
+  deathDestroyDelay: 0.94
+  animator: {fileID: 135640591653969630}
+  spriteRenderer: {fileID: 6629061337107233106}
   flipByVelocity: 1
   facingRightDefault: 1
   groundMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   feetOffset: {x: 0, y: -0.5}
-  edgeCheckForward: 0.45
-  edgeCheckDown: 0.9
-  wallCheckDistance: 0.25
+  edgeCheckForward: 0.5
+  edgeCheckDown: 2
+  wallCheckDistance: 0.3
   projectilePrefab: {fileID: 2305735452437659149, guid: 2ab9f4dfdfb1e45498ad2015d6dc5469, type: 3}
   muzzle: {fileID: 5764090974431102409}
-  shotsPerSecond: 1.5
+  shotsPerSecond: 1
   damage: 8
-  projectileSpeed: 10
+  projectileSpeed: 7
+  stopDistance: 7
+  waypoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  waypointReachEps: 0.1
+  idleAtPointTime: 2
 --- !u!95 &135640591653969630
 Animator:
   serializedVersion: 7

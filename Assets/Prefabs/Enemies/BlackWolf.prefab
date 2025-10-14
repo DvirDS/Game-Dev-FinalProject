@@ -176,7 +176,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc5c2f61a69b5e0459122a1d4d30c15e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 6
+  moveSpeed: 7
   detectionRange: 6
   attackRange: 2
   scoreValue: 200
@@ -188,7 +188,7 @@ MonoBehaviour:
     m_Bits: 256
   target: {fileID: 0}
   state: 0
-  maxHealth: 40
+  maxHealth: 50
   hurtDuration: 0.2
   deathDestroyDelay: 0.86
   animator: {fileID: 7751223663916845615}

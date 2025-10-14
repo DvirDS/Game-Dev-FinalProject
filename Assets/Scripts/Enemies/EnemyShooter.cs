@@ -8,7 +8,6 @@ public class EnemyShooter : EnemyBase
     [SerializeField] private float shotsPerSecond = 1.5f;
     [SerializeField] private int damage = 8;
     [SerializeField] private float projectileSpeed = 10f;
-    // מרחק עצירה מהשחקן, בדיוק כמו ב-Melee
     [SerializeField, Min(0f)] private float stopDistance = 3f;
     private float cd;
 
@@ -20,7 +19,6 @@ public class EnemyShooter : EnemyBase
     private int _wpIndex;
     private float _idleTimer;
 
-    // פטרול - ללא שינוי
     protected override void PatrolTick()
     {
         if (waypoints == null || waypoints.Length == 0) { Stop(); return; }
@@ -33,6 +31,7 @@ public class EnemyShooter : EnemyBase
                 animator.SetBool("IsPatrolling", true);
             return;
         }
+
         var dest = (Vector2)waypoints[_wpIndex].position;
         if (!CanStepTowardsX(dest))
         {
@@ -40,6 +39,7 @@ public class EnemyShooter : EnemyBase
             return;
         }
         MoveTowards(dest);
+
         if (Vector2.Distance(transform.position, dest) <= waypointReachEps)
         {
             _wpIndex = (_wpIndex + 1) % waypoints.Length;
@@ -52,7 +52,6 @@ public class EnemyShooter : EnemyBase
         }
     }
 
-    // לוגיקת מרדף - זהה לחלוטין ל-EnemyMelee
     protected override void ChaseTick()
     {
         if (!target)
@@ -78,7 +77,6 @@ public class EnemyShooter : EnemyBase
             Stop();
     }
 
-    // לוגיקת תקיפה - תנועה זהה ל-EnemyMelee + ירי
     protected override void AttackTick()
     {
         if (!target)
@@ -87,7 +85,8 @@ public class EnemyShooter : EnemyBase
             return;
         }
 
-        // --- חלק התנועה: זהה ל-EnemyMelee ---
+        FaceTarget();
+
         Vector2 selfPos = transform.position;
         Vector2 targetPos = target.position;
         Vector2 lockedPos = new Vector2(targetPos.x, selfPos.y);
@@ -100,12 +99,11 @@ public class EnemyShooter : EnemyBase
         {
             float distX = Mathf.Abs(targetPos.x - selfPos.x);
             if (distX > stopDistance)
-                MoveTowards(lockedPos); // אם השחקן זז, נתקרב אליו
+                MoveTowards(lockedPos);
             else
-                Stop(); // אם אנחנו מספיק קרובים, נעצור
+                Stop();
         }
 
-        // --- חלק הירי: הפעולה הייחודית ל-Shooter ---
         cd -= Time.deltaTime;
         if (cd <= 0f && projectilePrefab && muzzle)
         {
@@ -120,5 +118,12 @@ public class EnemyShooter : EnemyBase
             }
             cd = 1f / Mathf.Max(shotsPerSecond, 0.01f);
         }
+    }
+
+    void FaceTarget()
+    {
+        if (!spriteRenderer || !target) return;
+        spriteRenderer.flipX = (target.position.x < transform.position.x);
+
     }
 }
