@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: SMG
   price: 500
-  ammoPerPurchase: 50
+  ammoPerPurchase: 100
   icon: {fileID: 0}
   hasInfiniteAmmo: 0
   damage: 5

@@ -1875,11 +1875,11 @@ PrefabInstance:
     - target: {fileID: 2855544352461444767, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
       propertyPath: 'waypoints.Array.data[0]'
       value: 
-      objectReference: {fileID: 1254560018}
+      objectReference: {fileID: 1465897242}
     - target: {fileID: 2855544352461444767, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
       propertyPath: 'waypoints.Array.data[1]'
       value: 
-      objectReference: {fileID: 1465897242}
+      objectReference: {fileID: 1254560018}
     - target: {fileID: 3011195287830659152, guid: e0eebb80f0b751a46bcdeffe6f6632fa, type: 3}
       propertyPath: m_Name
       value: BlackWolf (1)

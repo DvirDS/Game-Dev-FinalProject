@@ -9845,7 +9845,7 @@ MonoBehaviour:
   target: {fileID: 1771183221}
   offsetX: 0
   minX: -100
-  maxX: 100
+  maxX: 23.2
   smoothTime: 0.12
   pixelSnap: 0
   pixelsPerUnit: 16

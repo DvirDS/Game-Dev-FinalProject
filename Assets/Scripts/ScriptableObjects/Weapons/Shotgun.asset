@@ -17,12 +17,12 @@ MonoBehaviour:
   ammoPerPurchase: 15
   icon: {fileID: 0}
   hasInfiniteAmmo: 0
-  damage: 7
+  damage: 10
   fireRate: 1
   muzzleVelocity: 14
   isAutomatic: 0
   bulletsPerShot: 3
-  spreadAngle: 10
+  spreadAngle: 5
   projectilePrefab: {fileID: 656123203998378217, guid: 3542fc419d434b446bec484fbdae1539, type: 3}
   muzzleVFX: {fileID: 0}
   fireSfx: {fileID: 0}
