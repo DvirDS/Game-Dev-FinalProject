@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerInputReader : MonoBehaviour
 {
-    private PlayerInputActions _actions;
+    private PlayerInputActions actions;
 
     public Vector2 Move { get; private set; }
     public bool FireHeld { get; private set; }
@@ -15,27 +15,27 @@ public class PlayerInputReader : MonoBehaviour
 
     void Awake()
     {
-        _actions = new PlayerInputActions();
+        actions = new PlayerInputActions();
 
-        _actions.Player.Move.performed += ctx => Move = ctx.ReadValue<Vector2>();
-        _actions.Player.Move.canceled += _ => Move = Vector2.zero;
+        actions.Player.Move.performed += ctx => Move = ctx.ReadValue<Vector2>();
+        actions.Player.Move.canceled += _ => Move = Vector2.zero;
 
-        _actions.Player.Fire.performed += _ => FireHeld = true;
-        _actions.Player.Fire.canceled += _ => FireHeld = false;
+        actions.Player.Fire.performed += _ => FireHeld = true;
+        actions.Player.Fire.canceled += _ => FireHeld = false;
 
-        _actions.Player.SwitchNext.performed += _ => SwitchNextPressed = true;
-        _actions.Player.SwitchPrev.performed += _ => SwitchPrevPressed = true;
-        _actions.Player.Interact.performed += _ => InteractPressed = true;
+        actions.Player.SwitchNext.performed += _ => SwitchNextPressed = true;
+        actions.Player.SwitchPrev.performed += _ => SwitchPrevPressed = true;
+        actions.Player.Interact.performed += _ => InteractPressed = true;
 
-        _actions.Player.Jump.performed += _ => JumpPressed = true;
-        _actions.Player.Sprint.performed += _ => SprintHeld = true;
-        _actions.Player.Sprint.canceled += _ => SprintHeld = false;
+        actions.Player.Jump.performed += _ => JumpPressed = true;
+        actions.Player.Sprint.performed += _ => SprintHeld = true;
+        actions.Player.Sprint.canceled += _ => SprintHeld = false;
         
-        _actions.Player.Pause.performed += _ => PausePressed = true;
+        actions.Player.Pause.performed += _ => PausePressed = true;
     }
 
-    void OnEnable() => _actions.Enable();
-    void OnDisable() => _actions.Disable();
+    void OnEnable() => actions.Enable();
+    void OnDisable() => actions.Disable();
 
     void LateUpdate()
     {

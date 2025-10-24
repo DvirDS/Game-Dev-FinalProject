@@ -6,6 +6,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 // 'Hurt' mechanic: In this system, 'Hurt' is not a
 // behavioral state in the main state machine. It is handled as a visual-only layer.
     public enum EnemyState { Patrol, Chase, Attack, Hurt, Dead }
+    [SerializeField] protected bool isMultiPart = false; // סמנו ב־Inspector למי שזה רלוונטי
 
     [Header("Stats")]
     [SerializeField] protected float moveSpeed = 3f;
@@ -21,6 +22,8 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     [Header("Line of Sight")]
     [Tooltip("Layers that block enemy vision (e.g. Walls, Ground)")]
     [SerializeField] protected LayerMask obstacleMask;
+    [Tooltip("גובה נקודת ירי קרן הראייה (ביחס לרגליים)")]
+    [SerializeField] protected float lineOfSightYOffset = 0.5f; // <--- תוסיף את זה
 
     [Header("Refs")]
     [SerializeField] protected Transform target;
@@ -132,7 +135,10 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
         if (!insideRange) return false;
 
-        RaycastHit2D hit = Physics2D.Linecast(selfPos, targetPos, obstacleMask);
+        // "נרים" את נקודת המוצא של הקרן
+        Vector2 linecastStart = selfPos + new Vector2(0, lineOfSightYOffset);
+
+        RaycastHit2D hit = Physics2D.Linecast(linecastStart, targetPos, obstacleMask);
         if (hit.collider != null)
         {
             return false;
@@ -255,32 +261,55 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
     void UpdateFacingByVelocity()
     {
-        if (!flipByVelocity || rb == null || !spriteRenderer) return;
-
+        if (!flipByVelocity || rb == null) return;
         float vx = rb.linearVelocity.x;
         if (Mathf.Abs(vx) < 0.01f) return;
-
         bool movingRight = vx > 0f;
-        spriteRenderer.flipX = movingRight != facingRightDefault;
+
+        if (isMultiPart)
+        {
+            // הפוך את הכיוון באמצעות scale.x של כל הדמות
+            float scaleX = Mathf.Abs(transform.localScale.x);
+            scaleX = movingRight == facingRightDefault ? scaleX : -scaleX;
+            transform.localScale = new Vector3(scaleX, transform.localScale.y, transform.localScale.z);
+        }
+        else if (spriteRenderer)
+        {
+            // flipX רגיל לספרייט יחיד
+            spriteRenderer.flipX = movingRight != facingRightDefault;
+        }
     }
+
 
     void OnDrawGizmosSelected()
     {
+        // --- תוסיף את הקוד הזה ---
+        // מציג את נקודת ירי קרן הראייה
+        Gizmos.color = Color.cyan; // צבע בולט
+        Vector2 linecastStart = (Vector2)transform.position + new Vector2(0, lineOfSightYOffset);
+        Gizmos.DrawWireSphere(linecastStart, 0.1f); // עיגול קטן בנקודה
+        // -------------------------
+
         if (useBoxDetection)
         {
             Gizmos.color = new Color(1f, 0.8f, 0f, 0.4f);
-            Gizmos.DrawWireCube(transform.position, detectionBoxSize);
 
-            Gizmos.color = new Color(1f, 0.2f, 0.2f, 0.4f);
-            Gizmos.DrawWireCube(transform.position, attackBoxSize);
-        }
-        else
-        {
-            Gizmos.color = new Color(1f, 0.8f, 0f, 0.5f);
-            Gizmos.DrawWireSphere(transform.position, detectionRange);
+            if (useBoxDetection)
+            {
+                Gizmos.color = new Color(1f, 0.8f, 0f, 0.4f);
+                Gizmos.DrawWireCube(transform.position, detectionBoxSize);
 
-            Gizmos.color = new Color(1f, 0.2f, 0.2f, 0.5f);
-            Gizmos.DrawWireSphere(transform.position, attackRange);
+                Gizmos.color = new Color(1f, 0.2f, 0.2f, 0.4f);
+                Gizmos.DrawWireCube(transform.position, attackBoxSize);
+            }
+            else
+            {
+                Gizmos.color = new Color(1f, 0.8f, 0f, 0.5f);
+                Gizmos.DrawWireSphere(transform.position, detectionRange);
+
+                Gizmos.color = new Color(1f, 0.2f, 0.2f, 0.5f);
+                Gizmos.DrawWireSphere(transform.position, attackRange);
+            }
         }
     }
 

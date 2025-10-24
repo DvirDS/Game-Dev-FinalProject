@@ -3473,7 +3473,7 @@ MonoBehaviour:
   minX: -37.21
   maxX: 30
   smoothTime: 0.12
-  pixelSnap: 1
+  pixelSnap: 0
   pixelsPerUnit: 16
 --- !u!1 &754095309
 GameObject:
@@ -6849,6 +6849,10 @@ PrefabInstance:
     - target: {fileID: 6951922013034653274, guid: 393a584cdde495f44a8151a5d0ed9e9b, type: 3}
       propertyPath: stopDistance
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6951922013034653274, guid: 393a584cdde495f44a8151a5d0ed9e9b, type: 3}
+      propertyPath: useBoxDetection
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6951922013034653274, guid: 393a584cdde495f44a8151a5d0ed9e9b, type: 3}
       propertyPath: 'waypoints.Array.data[0]'
