@@ -1,6 +1,8 @@
-using UnityEngine;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 [System.Serializable]
@@ -17,7 +19,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance => I;
 
     // Game States
-    public enum GameState { MainMenu, Play, Pause, Dialogue, GameOver }
+    public enum GameState { MainMenu, Play, Pause, Dialogue, GameOver, Victory}
     [SerializeField] private GameState state = GameState.MainMenu;
     public GameState State => state;
 
@@ -39,7 +41,7 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    // ----- State transitions -----
+    // State transitions
     public void StartGame()
     {
         Score = 0;
@@ -58,10 +60,34 @@ public class GameManager : MonoBehaviour
         if (state == next) return;
         state = next;
         OnStateChanged?.Invoke(state);
-        Time.timeScale = (state == GameState.Pause || state == GameState.GameOver || state == GameState.Dialogue) ? 0f : 1f;
+
+        Time.timeScale = (state == GameState.Pause || state == GameState.GameOver ||
+                          state == GameState.Dialogue || state == GameState.Victory) ? 0f : 1f; // <--- десу Victory
     }
 
-    // ----- Health bridge for UI -----
+    public void StartVictorySequence()
+    {
+        if (state == GameState.Play)
+        {
+            StartCoroutine(VictoryCoroutine());
+        }
+    }
+
+    private IEnumerator VictoryCoroutine()
+    {
+        yield return new WaitForSeconds(3f);
+        SetState(GameState.Victory);
+    }
+
+    public void ReturnToMainMenu()
+    {
+        Time.timeScale = 1f;
+        SetState(GameState.MainMenu);
+        SceneManager.LoadScene("StartMenu");
+    }
+
+
+    // Health bridge for UI 
     public void NotifyPlayerHealth(int current, int max)
     {
         OnPlayerHealthChanged?.Invoke(current, max);

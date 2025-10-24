@@ -6,13 +6,14 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 // 'Hurt' mechanic: In this system, 'Hurt' is not a
 // behavioral state in the main state machine. It is handled as a visual-only layer.
     public enum EnemyState { Patrol, Chase, Attack, Hurt, Dead }
-    [SerializeField] protected bool isMultiPart = false; // סמנו ב־Inspector למי שזה רלוונטי
+    [SerializeField] protected bool isMultiPart = false; 
 
     [Header("Stats")]
     [SerializeField] protected float moveSpeed = 3f;
     [SerializeField] protected float detectionRange = 8f;
     [SerializeField] protected float attackRange = 4f;
     [SerializeField, Min(0)] protected int scoreValue = 10;
+    [SerializeField] protected bool isBoss = false; 
 
     [Header("Detection Shape")]
     [SerializeField] protected bool useBoxDetection = true; 
@@ -22,8 +23,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     [Header("Line of Sight")]
     [Tooltip("Layers that block enemy vision (e.g. Walls, Ground)")]
     [SerializeField] protected LayerMask obstacleMask;
-    [Tooltip("גובה נקודת ירי קרן הראייה (ביחס לרגליים)")]
-    [SerializeField] protected float lineOfSightYOffset = 0.5f; // <--- תוסיף את זה
+    [SerializeField] protected float lineOfSightYOffset = 0.5f; 
 
     [Header("Refs")]
     [SerializeField] protected Transform target;
@@ -135,7 +135,6 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
         if (!insideRange) return false;
 
-        // "נרים" את נקודת המוצא של הקרן
         Vector2 linecastStart = selfPos + new Vector2(0, lineOfSightYOffset);
 
         RaycastHit2D hit = Physics2D.Linecast(linecastStart, targetPos, obstacleMask);
@@ -252,11 +251,19 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
     IEnumerator DieRoutine()
     {
-        GameManager.I?.AddScore(scoreValue);
         ChangeState(EnemyState.Dead);
+
+        if (isBoss)
+        {
+            GameManager.I?.StartVictorySequence();
+            GameManager.I?.AddScore(scoreValue);
+        }
+        else
+        {
+            GameManager.I?.AddScore(scoreValue);
+        }
         yield return new WaitForSeconds(deathDestroyDelay);
         Destroy(gameObject);
-        
     }
 
     void UpdateFacingByVelocity()
@@ -268,14 +275,12 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
         if (isMultiPart)
         {
-            // הפוך את הכיוון באמצעות scale.x של כל הדמות
             float scaleX = Mathf.Abs(transform.localScale.x);
             scaleX = movingRight == facingRightDefault ? scaleX : -scaleX;
             transform.localScale = new Vector3(scaleX, transform.localScale.y, transform.localScale.z);
         }
         else if (spriteRenderer)
         {
-            // flipX רגיל לספרייט יחיד
             spriteRenderer.flipX = movingRight != facingRightDefault;
         }
     }
@@ -283,12 +288,9 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
     void OnDrawGizmosSelected()
     {
-        // --- תוסיף את הקוד הזה ---
-        // מציג את נקודת ירי קרן הראייה
-        Gizmos.color = Color.cyan; // צבע בולט
+        Gizmos.color = Color.cyan;
         Vector2 linecastStart = (Vector2)transform.position + new Vector2(0, lineOfSightYOffset);
-        Gizmos.DrawWireSphere(linecastStart, 0.1f); // עיגול קטן בנקודה
-        // -------------------------
+        Gizmos.DrawWireSphere(linecastStart, 0.1f); 
 
         if (useBoxDetection)
         {

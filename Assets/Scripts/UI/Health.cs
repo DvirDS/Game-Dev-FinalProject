@@ -12,8 +12,6 @@ public class Health : MonoBehaviour, IDamageable
 
     void Start()
     {
-        // זה החלק החסר!
-        // הוא מעדכן את ה-UI עם כמות החיים המלאה ברגע שהמשחק מתחיל
         if (isPlayer)
         {
             GameManager.I?.NotifyPlayerHealth(Current, maxHealth);
@@ -42,7 +40,6 @@ public class Health : MonoBehaviour, IDamageable
         EnemyBase enemy = GetComponent<EnemyBase>();
         if (enemy != null)
         {
-            // קריאה ישירה, נקייה וברורה לפונקציית המוות החדשה
             enemy.Kill();
         }
         else

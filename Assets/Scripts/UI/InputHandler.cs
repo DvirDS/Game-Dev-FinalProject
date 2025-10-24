@@ -1,11 +1,19 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/*
+ * This script acts as a global input manager.
+ * Its primary role is to find the 'PlayerInputReader' in any loaded scene.
+ * In its Update loop, it specifically listens for the "Pause" input action.
+ * When pause is pressed, it checks the GameManager's state and tells it to
+ * either pause or resume the game.
+ * It is designed to be persistent (or re-find its components) across scene loads.
+ */
+
 public class InputHandler : MonoBehaviour
 {
     private PlayerInputReader inputReader;
 
-    // The Start method will run on the first scene
     void Start()
     {
         FindAndAssignInputReader();
@@ -32,19 +40,10 @@ public class InputHandler : MonoBehaviour
     private void FindAndAssignInputReader()
     {
         inputReader = FindAnyObjectByType<PlayerInputReader>();
-        if (inputReader == null)
-        {
-            // It's okay if we don't find it right away, Update will keep trying.
-        }
-        else
-        {
-            Debug.Log("InputHandler successfully found the PlayerInputReader.");
-        }
     }
 
     void Update()
     {
-        // --- NEW: Robustness Check ---
         // If we don't have a reader for any reason, try to find it again.
         if (inputReader == null)
         {

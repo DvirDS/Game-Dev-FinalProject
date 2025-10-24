@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 3729942642173834241}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.343, y: -0.523, z: 0}
+  m_LocalPosition: {x: 0, y: -0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -235,8 +235,9 @@ MonoBehaviour:
   detectionRange: 8
   attackRange: 4
   scoreValue: 10
+  isBoss: 1
   useBoxDetection: 1
-  detectionBoxSize: {x: 30, y: 4}
+  detectionBoxSize: {x: 50, y: 4}
   attackBoxSize: {x: 14, y: 4}
   obstacleMask:
     serializedVersion: 2
@@ -259,10 +260,10 @@ MonoBehaviour:
   edgeCheckDown: 0.9
   wallCheckDistance: 0.25
   projectilePrefab: {fileID: 1810428594526195375, guid: 92393a1a0347a6c4ea76553a6de65f1d, type: 3}
-  muzzle: {fileID: 0}
+  muzzle: {fileID: 4475814832647006784}
   shotsPerSecond: 1.5
-  damage: 8
-  projectileSpeed: 10
+  damage: 20
+  projectileSpeed: 7
   stopDistance: 7
   waypoints:
   - {fileID: 0}

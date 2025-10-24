@@ -1969,6 +1969,7 @@ MonoBehaviour:
   ammoText: {fileID: 925340504}
   pausePanel: {fileID: 2142629632}
   gameOverPanel: {fileID: 169257329}
+  victoryPanel: {fileID: 0}
 --- !u!114 &317578164
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3509,7 +3510,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 39, y: 112}
+  m_AnchoredPosition: {x: 0, y: 112}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &754095311
@@ -8989,6 +8990,7 @@ SceneRoots:
   - {fileID: 732799408}
   - {fileID: 317578167}
   - {fileID: 523763041}
+  - {fileID: 714189293}
   - {fileID: 5565264846569162168}
   - {fileID: 1490081512}
   - {fileID: 1173923632}
@@ -9001,11 +9003,10 @@ SceneRoots:
   - {fileID: 286906092}
   - {fileID: 820358172}
   - {fileID: 2085720170}
+  - {fileID: 1547059026}
   - {fileID: 6912343456200923287}
   - {fileID: 237186777}
   - {fileID: 228574815}
-  - {fileID: 714189293}
-  - {fileID: 1547059026}
-  - {fileID: 1349330729}
   - {fileID: 4283739267030925113}
+  - {fileID: 1349330729}
   - {fileID: 1165305052}

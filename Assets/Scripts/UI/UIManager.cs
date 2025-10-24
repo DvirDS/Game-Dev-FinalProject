@@ -15,6 +15,7 @@ public class UIManager : MonoBehaviour
     [Header("Screens")]
     [SerializeField] private GameObject pausePanel;
     [SerializeField] private GameObject gameOverPanel;
+    [SerializeField] private GameObject victoryPanel; 
 
     void OnEnable()
     {
@@ -45,6 +46,8 @@ public class UIManager : MonoBehaviour
         if (hudRoot) hudRoot.SetActive(inPlay);
         if (pausePanel) pausePanel.SetActive(s == GameManager.GameState.Pause);
         if (gameOverPanel) gameOverPanel.SetActive(s == GameManager.GameState.GameOver);
+        if (victoryPanel) victoryPanel.SetActive(s == GameManager.GameState.Victory); 
+
         if (inPlay)
         {
             UpdateScore(GameManager.I.Score);
@@ -95,4 +98,9 @@ public class UIManager : MonoBehaviour
     }
 
     public void OnResumeClicked() => GameManager.I?.ResumeGame();
+
+    public void OnReturnToMainMenuClicked()
+    {
+        GameManager.I?.ReturnToMainMenu();
+    }
 }
