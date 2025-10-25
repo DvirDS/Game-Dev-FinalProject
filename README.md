@@ -12,7 +12,7 @@ In **Turtle Trigger**, your goal is to make it through challenging obstacle cour
 
 #### 🧩 Challenging Levels
 
-Navigate through exciting stages full of traps, puzzles, and enemies.
+Navigate through exciting stages full of traps and enemies.
 
 #### 🐲 Epic Boss Battles
 
