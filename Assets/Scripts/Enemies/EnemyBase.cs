@@ -285,7 +285,9 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         }
     }
 
-
+    /// <summary>
+    /// //////////////////////////
+    /// </summary>
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.cyan;

@@ -66,11 +66,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: 1544dcfa642130a45be38de38cc68fae, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -61.33
+      value: 11.10964
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: 1544dcfa642130a45be38de38cc68fae, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.194
+      value: 0.8606918
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: 1544dcfa642130a45be38de38cc68fae, type: 3}
       propertyPath: m_LocalPosition.z
@@ -468,6 +468,7 @@ MonoBehaviour:
   detectionRange: 8
   attackRange: 4
   scoreValue: 200
+  isBoss: 0
   useBoxDetection: 1
   detectionBoxSize: {x: 20, y: 4}
   attackBoxSize: {x: 3, y: 5}
