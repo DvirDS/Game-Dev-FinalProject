@@ -4,8 +4,6 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
-
-    // --- הוספנו Singleton ---
     public static UIManager I { get; private set; }
 
 
@@ -23,14 +21,13 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject victoryPanel;
 
     [Header("Boss")]
-    [SerializeField] private GameObject bossHealthBarRoot; // האובייקט הראשי שמכיל את הסליידר
-    [SerializeField] private Slider bossHealthSlider;      // ה-Slider עצמו
-    private EnemyBase currentBoss; // הפניה לבוס שאנחנו עוקבים אחריו
+    [SerializeField] private GameObject bossHealthBarRoot;
+    [SerializeField] private Slider bossHealthSlider;
+    private EnemyBase currentBoss;
 
 
     void Awake()
     {
-        // הגדרת ה-Singleton
         if (I == null)
         {
             I = this;
@@ -56,14 +53,10 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
-        // ודא שמד החיים של הבוס מוסתר בהתחלה
         if (bossHealthBarRoot != null)
         {
             bossHealthBarRoot.SetActive(false);
         }
-
-        // --- הוסף את השורה הבאה ---
-        // עכשיו, כשה-UI מוכן והסצנה נטענה, אמור למנהל המשחק להיכנס למצב 'Play'
         GameManager.I?.SetState(GameManager.GameState.Play);
     }
 
@@ -81,7 +74,6 @@ public class UIManager : MonoBehaviour
         {
             currentBoss.OnHealthChanged -= UpdateBossHealth;
         }
-        // --- סוף ---
     }
 
     private void HandleGameStateChanged(GameManager.GameState s)
@@ -91,13 +83,10 @@ public class UIManager : MonoBehaviour
         if (pausePanel) pausePanel.SetActive(s == GameManager.GameState.Pause);
         if (gameOverPanel) gameOverPanel.SetActive(s == GameManager.GameState.GameOver);
         if (victoryPanel) victoryPanel.SetActive(s == GameManager.GameState.Victory);
-        // --- הוספנו את החלק הבא ---
-        // הסתר את מד החיים של הבוס בסיום משחק או ניצחון
         if (s == GameManager.GameState.GameOver || s == GameManager.GameState.Victory)
         {
             HideBossHealth();
         }
-        // --- סוף ---
         if (inPlay)
         {
             UpdateScore(GameManager.I.Score);
@@ -119,13 +108,11 @@ public class UIManager : MonoBehaviour
     {
         string scoreString = "Score: " + newScore;
 
-        // Update the main HUD score
         if (scoreText)
         {
             scoreText.text = scoreString;
         }
 
-        // Also update the shop score
         if (shopScoreText)
         {
             shopScoreText.text = scoreString;
@@ -136,7 +123,7 @@ public class UIManager : MonoBehaviour
     {
         if (ammoText)
         {
-            if (currentAmmo == -1) // -1 is our signal for infinite ammo
+            if (currentAmmo == -1)
             {
                 ammoText.text = "Ammo: --";
             }
@@ -154,12 +141,6 @@ public class UIManager : MonoBehaviour
         GameManager.I?.ReturnToMainMenu();
     }
 
-    // --- הוספנו את 3 הפונקציות הבאות בסוף הקובץ ---
-
-    /// <summary>
-    /// פונקציה זו נקראת ע"י הטריגר של הזירה.
-    /// היא מציגה את מד החיים ונרשמת לאירועים של הבוס.
-    /// </summary>
     public void ShowBossHealth(EnemyBase boss)
     {
         if (boss == null)
@@ -168,31 +149,23 @@ public class UIManager : MonoBehaviour
             return;
         }
 
-        // אם אנחנו כבר עוקבים אחרי בוס (למקרה שיש כמה), נתק קודם
         if (currentBoss != null)
         {
             currentBoss.OnHealthChanged -= UpdateBossHealth;
         }
 
-        // שמור את הבוס החדש
         currentBoss = boss;
 
-        // הירשם לאירוע שלו
         currentBoss.OnHealthChanged += UpdateBossHealth;
 
-        // עדכן את מד החיים בפעם הראשונה (עם החיים המלאים שלו)
         UpdateBossHealth(currentBoss.GetCurrentHealth(), currentBoss.GetMaxHealth());
 
-        // הצג את מד החיים
         if (bossHealthBarRoot != null)
         {
             bossHealthBarRoot.SetActive(true);
         }
     }
 
-    /// <summary>
-    /// פונקציה זו מוסתרת (private) ומופעלת רק ע"י האירוע של הבוס.
-    /// </summary>
     private void UpdateBossHealth(int current, int max)
     {
         if (bossHealthSlider != null)
@@ -201,16 +174,12 @@ public class UIManager : MonoBehaviour
             bossHealthSlider.value = Mathf.Clamp(current, 0, max);
         }
 
-        // אם הבוס מת, הסתר את המד
         if (current <= 0)
         {
             HideBossHealth();
         }
     }
 
-    /// <summary>
-    /// פונקציה להסתרה וניקוי
-    /// </summary>
     public void HideBossHealth()
     {
         if (bossHealthBarRoot != null)
@@ -218,7 +187,6 @@ public class UIManager : MonoBehaviour
             bossHealthBarRoot.SetActive(false);
         }
 
-        // נתק את ההאזנה כדי למנוע דליפות זיכרון
         if (currentBoss != null)
         {
             currentBoss.OnHealthChanged -= UpdateBossHealth;

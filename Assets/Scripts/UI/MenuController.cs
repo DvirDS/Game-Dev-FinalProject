@@ -35,13 +35,12 @@ public class MenuController : MonoBehaviour
 
     public void PlayGame()
     {
-        GameManager.I?.ResetGameData(); // <--- קרא לפונקציה בשמה החדש
+        GameManager.I?.ResetGameData();
         SceneManager.LoadScene("Game");
     }
 
     public void QuitGame()
     {
-        // הקוד שלך בסדר, משאיר אותו
         UnityEditor.EditorApplication.isPlaying = false;
         Application.Quit();
     }

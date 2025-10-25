@@ -146,7 +146,6 @@ public class WeaponController : MonoBehaviour
 
         currentIndex = index;
         UpdateAmmoUI();
-        // Optional, currently not used
         GameManager.I?.NotifyWeaponSwitched();
     }
 

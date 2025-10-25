@@ -14,16 +14,13 @@ public class WeaponSaveData
 
 public class GameManager : MonoBehaviour
 {
-    // Singleton
     public static GameManager I { get; private set; }
     public static GameManager Instance => I;
 
-    // Game States
     public enum GameState { MainMenu, Play, Pause, Dialogue, GameOver, Victory}
     [SerializeField] private GameState state = GameState.MainMenu;
     public GameState State => state;
 
-    // Events
     public event Action<GameState> OnStateChanged;
     public event Action<int, int> OnPlayerHealthChanged;
     public event Action OnWeaponSwitched;
@@ -41,14 +38,11 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    // State transitions
-    // שינינו את שם הפונקציה, והסרנו את SetState
     public void ResetGameData()
     {
         Score = 0;
         OnScoreChanged?.Invoke(Score);
         PlayerOwnedWeapons.Clear();
-        // SetState(GameState.Play); // --- מחקנו את השורה הזו ---
     }
     public void PauseGame() => SetState(GameState.Pause);
     public void ResumeGame() => SetState(GameState.Play);
@@ -87,8 +81,6 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("StartMenu");
     }
 
-
-    // Health bridge for UI 
     public void NotifyPlayerHealth(int current, int max)
     {
         OnPlayerHealthChanged?.Invoke(current, max);

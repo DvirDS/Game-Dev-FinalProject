@@ -16,23 +16,25 @@ public class EnemyShooter : EnemyBase
     [SerializeField, Min(0f)] private float waypointReachEps = 0.1f;
     [SerializeField, Min(0f)] private float idleAtPointTime = 0.0f;
 
-    private int _wpIndex;
-    private float _idleTimer;
+    private int wpIndex;
+    private float idleTimer;
+
+    private const float MIN_STOP_DISTANCE = 0.01f;
 
     protected override void PatrolTick()
     {
         if (waypoints == null || waypoints.Length == 0) { Stop(); return; }
-        if (_idleTimer > 0f)
+        if (idleTimer > 0f)
         {
-            _idleTimer -= Time.deltaTime;
+            idleTimer -= Time.deltaTime;
             Stop();
             if (animator) animator.SetBool("IsPatrolling", false);
-            if (_idleTimer <= 0f && animator)
+            if (idleTimer <= 0f && animator)
                 animator.SetBool("IsPatrolling", true);
             return;
         }
 
-        var dest = (Vector2)waypoints[_wpIndex].position;
+        var dest = (Vector2)waypoints[wpIndex].position;
         if (!CanStepTowardsX(dest))
         {
             Stop();
@@ -42,10 +44,10 @@ public class EnemyShooter : EnemyBase
 
         if (Vector2.Distance(transform.position, dest) <= waypointReachEps)
         {
-            _wpIndex = (_wpIndex + 1) % waypoints.Length;
+            wpIndex = (wpIndex + 1) % waypoints.Length;
             if (idleAtPointTime > 0f)
             {
-                _idleTimer = idleAtPointTime;
+                idleTimer = idleAtPointTime;
                 Stop();
                 if (animator) animator.SetBool("IsPatrolling", false);
             }
@@ -71,7 +73,7 @@ public class EnemyShooter : EnemyBase
         }
 
         float distX = Mathf.Abs(targetPos.x - selfPos.x);
-        if (distX > Mathf.Max(stopDistance, 0.01f))
+        if (distX > Mathf.Max(stopDistance, MIN_STOP_DISTANCE))
             MoveTowards(chasePos);
         else
             Stop();
@@ -116,7 +118,7 @@ public class EnemyShooter : EnemyBase
                 var dir = (target.position - muzzle.position).normalized;
                 proj.Launch(dir);
             }
-            cd = 1f / Mathf.Max(shotsPerSecond, 0.01f);
+            cd = 1f / Mathf.Max(shotsPerSecond, MIN_STOP_DISTANCE);
         }
     }
 

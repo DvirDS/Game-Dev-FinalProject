@@ -3,7 +3,6 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// מציג ויזואלית את הנשק על השחקן ומאתר עוגן "Muzzle" מתוך פריפאב הנשק.
 public class WeaponVisualController : MonoBehaviour
 {
     [Header("Refs")]
@@ -28,7 +27,6 @@ public class WeaponVisualController : MonoBehaviour
     private WeaponData lastShown;
     private Vector3 baseViewScale = Vector3.one;
 
-    // ===== חדש: עוגן הקנה שנאתר מתוך ה-view =====
     public Transform CurrentMuzzle { get; private set; }
     private Transform runtimeMuzzleAnchor;
 
@@ -36,7 +34,7 @@ public class WeaponVisualController : MonoBehaviour
     public struct WeaponSkin
     {
         public WeaponData weapon;
-        public GameObject prefab; // Prefab עם SpriteRenderer/Animator וכו'
+        public GameObject prefab;
     }
 
     void Reset()
@@ -69,14 +67,12 @@ public class WeaponVisualController : MonoBehaviour
 
         bool flip = ownerSprite.flipX;
 
-        // 1) מיקום המתקן (Mount) – Spiegel לצד שמאל
         weaponMount.localPosition = new Vector3(
             Mathf.Abs(rightHandOffset.x) * (flip ? -1f : 1f),
             rightHandOffset.y,
             weaponMount.localPosition.z
         );
 
-        // 2) היפוך סקייל של ה-view (לא גם flipX וגם סקייל!)
         if (currentView)
         {
             var s = currentView.transform.localScale;
@@ -95,7 +91,6 @@ public class WeaponVisualController : MonoBehaviour
 
         if (!data || !weaponMount) return;
 
-        // האם יש פריפאב ויזואלי ייעודי?
         var skin = skins.FirstOrDefault(x => x.weapon == data);
         GameObject prefab = skin.prefab;
 
@@ -128,14 +123,12 @@ public class WeaponVisualController : MonoBehaviour
                 ? Vector3.one
                 : currentView.transform.localScale;
 
-            // ===== חדש: למצוא עוגן "Muzzle" מתוך פריפאב הנשק =====
             CurrentMuzzle =
                 FindChildRecursive(currentView.transform, "Muzzle") ??
                 FindChildRecursive(currentView.transform, "MuzzleAnchor");
 
             if (!CurrentMuzzle)
             {
-                // Fallback: ניצור עוגן זמני בקצה ימין של הספרייט (0,0) – תוכל להזיז בפריפאב אחר כך
                 if (!runtimeMuzzleAnchor)
                     runtimeMuzzleAnchor = new GameObject("_RuntimeMuzzle").transform;
 
