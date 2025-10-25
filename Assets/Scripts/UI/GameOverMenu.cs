@@ -1,15 +1,17 @@
-
 using UnityEngine;
 
 public class GameOverMenu : MonoBehaviour
 {
     [SerializeField] private SceneLoader loader;
     [SerializeField] private string mainMenuScene = "StartMenu";
+    [SerializeField] private string firstLevelScene = "Game";
 
     public void OnRetry()
     {
-        loader.LoadScene("Game");
+        GameManager.I?.StartGame();
+        loader.LoadScene(firstLevelScene);
     }
+
     public void OnMainMenu()
     {
         loader.LoadScene(mainMenuScene);

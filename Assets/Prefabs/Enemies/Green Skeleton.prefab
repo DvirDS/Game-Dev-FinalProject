@@ -302,11 +302,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7844034851257913169, guid: ac97c5508ad73a54692ce983f9271e5b, type: 3}
       propertyPath: meleeRange
-      value: 1.5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7844034851257913169, guid: ac97c5508ad73a54692ce983f9271e5b, type: 3}
       propertyPath: meleeDamage
       value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 7844034851257913169, guid: ac97c5508ad73a54692ce983f9271e5b, type: 3}
+      propertyPath: hurtDuration
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 8005651630235351890, guid: ac97c5508ad73a54692ce983f9271e5b, type: 3}
       propertyPath: m_AutoRebind

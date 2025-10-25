@@ -246,7 +246,7 @@ MonoBehaviour:
   target: {fileID: 0}
   state: 0
   maxHealth: 200
-  hurtDuration: 0.2
+  hurtDuration: 0.05
   deathDestroyDelay: 1.5
   animator: {fileID: 5796849025932338888}
   spriteRenderer: {fileID: 2725348259180584554}

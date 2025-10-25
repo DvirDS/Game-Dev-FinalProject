@@ -176,20 +176,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc5c2f61a69b5e0459122a1d4d30c15e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isMultiPart: 0
   moveSpeed: 7
   detectionRange: 6
   attackRange: 2
   scoreValue: 200
+  isBoss: 0
   useBoxDetection: 1
   detectionBoxSize: {x: 15, y: 3}
   attackBoxSize: {x: 4, y: 3}
   obstacleMask:
     serializedVersion: 2
     m_Bits: 256
+  lineOfSightYOffset: 0.5
   target: {fileID: 0}
   state: 0
   maxHealth: 50
-  hurtDuration: 0.2
+  hurtDuration: 0.05
   deathDestroyDelay: 0.86
   animator: {fileID: 7751223663916845615}
   spriteRenderer: {fileID: 5807881605182105639}
