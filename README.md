@@ -24,9 +24,11 @@ Switch between weapons on the fly and find the best way to crush your foes.
 
 #### 🎮 Responsive Controls
 
+* **Shoot with the left mouse button**
 * Move with **Arrow Keys** or **WASD**
 * Jump with **Spacebar**
 * Switch weapons with **E** and **Q**
+
 
 #### 🎨 Stylish Visuals
 
