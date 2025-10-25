@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -38,6 +39,8 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
     protected int _health;
     protected bool _invulnerable;
+
+    public event Action<int, int> OnHealthChanged;
 
     [Header("Animator")]
     [SerializeField] protected Animator animator;
@@ -233,6 +236,11 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         if (state == EnemyState.Dead || _invulnerable) return;
 
         _health -= Mathf.Max(1, amount);
+
+        // --- הוספנו את השורה הבאה ---
+        // שדר את החיים המעודכנים (נוכחי, מקסימום)
+        OnHealthChanged?.Invoke(_health, maxHealth);
+
         if (_health <= 0)
         {
             StartCoroutine(DieRoutine());
@@ -251,6 +259,10 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
     IEnumerator DieRoutine()
     {
+        // --- הוספנו את השורה הבאה ---
+        // ודא שה-UI מציג 0 חיים כשהבוס מת
+        OnHealthChanged?.Invoke(0, maxHealth);
+
         ChangeState(EnemyState.Dead);
 
         if (isBoss)
@@ -353,6 +365,22 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         if (HasWallAhead(s)) return false;    // Obstacle/wall ahead
         if (!HasGroundAhead(s)) return false; // No ground ahead - platform edge
         return true;
+    }
+
+    /// <summary>
+    /// מחזיר את החיים הנוכחיים
+    /// </summary>
+    public int GetCurrentHealth()
+    {
+        return _health;
+    }
+
+    /// <summary>
+    /// מחזיר את החיים המקסימליים
+    /// </summary>
+    public int GetMaxHealth()
+    {
+        return maxHealth;
     }
 
 }

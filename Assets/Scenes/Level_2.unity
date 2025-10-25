@@ -7759,6 +7759,8 @@ MonoBehaviour:
   pausePanel: {fileID: 232751676}
   gameOverPanel: {fileID: 1965046941}
   victoryPanel: {fileID: 0}
+  bossHealthBarRoot: {fileID: 0}
+  bossHealthSlider: {fileID: 0}
 --- !u!114 &408056926
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8123,6 +8125,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Green Skeleton (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 9056459795540694207, guid: 0737027ac29a0744fafee1e2f7222d6f, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 1771183221}
     - target: {fileID: 9056459795540694207, guid: 0737027ac29a0744fafee1e2f7222d6f, type: 3}
       propertyPath: 'waypoints.Array.data[0]'
       value: 
@@ -8535,6 +8541,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Green Skeleton (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 9056459795540694207, guid: 0737027ac29a0744fafee1e2f7222d6f, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 1771183221}
     - target: {fileID: 9056459795540694207, guid: 0737027ac29a0744fafee1e2f7222d6f, type: 3}
       propertyPath: feetOffset.y
       value: -5
@@ -10183,6 +10193,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Green Skeleton (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 9056459795540694207, guid: 0737027ac29a0744fafee1e2f7222d6f, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 1771183221}
     - target: {fileID: 9056459795540694207, guid: 0737027ac29a0744fafee1e2f7222d6f, type: 3}
       propertyPath: detectionBoxSize.x
       value: 8
@@ -15342,6 +15356,10 @@ PrefabInstance:
       value: skeleton (2)
       objectReference: {fileID: 0}
     - target: {fileID: 7844034851257913169, guid: ac97c5508ad73a54692ce983f9271e5b, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 1771183221}
+    - target: {fileID: 7844034851257913169, guid: ac97c5508ad73a54692ce983f9271e5b, type: 3}
       propertyPath: 'waypoints.Array.data[0]'
       value: 
       objectReference: {fileID: 1329163466}
@@ -15583,6 +15601,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: skeleton (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 7844034851257913169, guid: ac97c5508ad73a54692ce983f9271e5b, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 1771183221}
     - target: {fileID: 7844034851257913169, guid: ac97c5508ad73a54692ce983f9271e5b, type: 3}
       propertyPath: 'waypoints.Array.data[0]'
       value: 
@@ -16380,6 +16402,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Green Skeleton (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 9056459795540694207, guid: 0737027ac29a0744fafee1e2f7222d6f, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 1771183221}
     - target: {fileID: 9056459795540694207, guid: 0737027ac29a0744fafee1e2f7222d6f, type: 3}
       propertyPath: 'waypoints.Array.data[0]'
       value: 
@@ -18252,6 +18278,10 @@ PrefabInstance:
       value: Green Skeleton (3)
       objectReference: {fileID: 0}
     - target: {fileID: 9056459795540694207, guid: 0737027ac29a0744fafee1e2f7222d6f, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 1771183221}
+    - target: {fileID: 9056459795540694207, guid: 0737027ac29a0744fafee1e2f7222d6f, type: 3}
       propertyPath: 'waypoints.Array.data[0]'
       value: 
       objectReference: {fileID: 855947226}
@@ -18769,6 +18799,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: skeleton (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 7844034851257913169, guid: ac97c5508ad73a54692ce983f9271e5b, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 1771183221}
     - target: {fileID: 7844034851257913169, guid: ac97c5508ad73a54692ce983f9271e5b, type: 3}
       propertyPath: 'waypoints.Array.data[0]'
       value: 
