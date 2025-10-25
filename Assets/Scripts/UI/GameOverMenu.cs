@@ -8,7 +8,7 @@ public class GameOverMenu : MonoBehaviour
 
     public void OnRetry()
     {
-        GameManager.I?.StartGame();
+        GameManager.I?.ResetGameData(); // <--- עדכן גם כאן לשם החדש
         loader.LoadScene(firstLevelScene);
     }
 

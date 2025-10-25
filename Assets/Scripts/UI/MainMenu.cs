@@ -8,7 +8,7 @@ public class MainMenu : MonoBehaviour
 
     public void OnStartClicked()
     {
-        GameManager.I?.StartGame();
+        GameManager.I?.ResetGameData();
         loader.LoadScene(gameSceneName);
     }
     public void OnQuitClicked() => loader.Quit();

@@ -42,12 +42,13 @@ public class GameManager : MonoBehaviour
     }
 
     // State transitions
-    public void StartGame()
+    // שינינו את שם הפונקציה, והסרנו את SetState
+    public void ResetGameData()
     {
         Score = 0;
         OnScoreChanged?.Invoke(Score);
         PlayerOwnedWeapons.Clear();
-        SetState(GameState.Play);
+        // SetState(GameState.Play); // --- מחקנו את השורה הזו ---
     }
     public void PauseGame() => SetState(GameState.Pause);
     public void ResumeGame() => SetState(GameState.Play);

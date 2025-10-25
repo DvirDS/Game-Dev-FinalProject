@@ -54,7 +54,6 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    // --- הוספנו Start ---
     void Start()
     {
         // ודא שמד החיים של הבוס מוסתר בהתחלה
@@ -62,8 +61,11 @@ public class UIManager : MonoBehaviour
         {
             bossHealthBarRoot.SetActive(false);
         }
+
+        // --- הוסף את השורה הבאה ---
+        // עכשיו, כשה-UI מוכן והסצנה נטענה, אמור למנהל המשחק להיכנס למצב 'Play'
+        GameManager.I?.SetState(GameManager.GameState.Play);
     }
-    // --- סוף ---
 
     void OnDisable()
     {

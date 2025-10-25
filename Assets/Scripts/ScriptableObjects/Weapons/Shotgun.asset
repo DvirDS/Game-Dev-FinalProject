@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: Shotgun
   price: 300
-  ammoPerPurchase: 7
+  ammoPerPurchase: 5
   icon: {fileID: 0}
   hasInfiniteAmmo: 0
   damage: 30
