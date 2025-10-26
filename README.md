@@ -27,8 +27,9 @@ Switch between weapons on the fly and find the best way to crush your foes.
 * **Shoot with the left mouse button**
 * Move with **Arrow Keys** or **WASD**
 * Jump with **Spacebar**
+* Run with **Left Shift**
 * Switch weapons with **E** and **Q**
-
+* Pause the game with **Esc**
 
 #### 🎨 Stylish Visuals
 
