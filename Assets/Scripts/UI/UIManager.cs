@@ -83,10 +83,26 @@ public class UIManager : MonoBehaviour
         if (pausePanel) pausePanel.SetActive(s == GameManager.GameState.Pause);
         if (gameOverPanel) gameOverPanel.SetActive(s == GameManager.GameState.GameOver);
         if (victoryPanel) victoryPanel.SetActive(s == GameManager.GameState.Victory);
-        if (s == GameManager.GameState.GameOver || s == GameManager.GameState.Victory)
+
+        if (bossHealthBarRoot != null)
         {
-            HideBossHealth();
+            if (s == GameManager.GameState.Play)
+            {
+                if (currentBoss != null)
+                {
+                    bossHealthBarRoot.SetActive(true);
+                }
+            }
+            else if (s == GameManager.GameState.Pause)
+            {
+                bossHealthBarRoot.SetActive(false);
+            }
+            else if (s == GameManager.GameState.GameOver || s == GameManager.GameState.Victory)
+            {
+                HideBossHealth();
+            }
         }
+
         if (inPlay)
         {
             UpdateScore(GameManager.I.Score);

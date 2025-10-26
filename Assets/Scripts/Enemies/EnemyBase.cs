@@ -4,10 +4,10 @@ using UnityEngine;
 
 public abstract class EnemyBase : MonoBehaviour, IDamageable
 {
-// 'Hurt' mechanic: In this system, 'Hurt' is not a
-// behavioral state in the main state machine. It is handled as a visual-only layer.
+    // 'Hurt' mechanic: In this system, 'Hurt' is not a
+    // behavioral state in the main state machine. It is handled as a visual-only layer.
     public enum EnemyState { Patrol, Chase, Attack, Hurt, Dead }
-    [SerializeField] protected bool isMultiPart = false; 
+    [SerializeField] protected bool isMultiPart = false;
 
     [Header("Stats")]
     [SerializeField] protected EnemyStats stats;
@@ -55,7 +55,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         rb = GetComponent<Rigidbody2D>();
         if (rb) rb.freezeRotation = true;
 
-        health = Mathf.Max(1, stats.maxHealth);
+        health = Mathf.Max(1, stats.maxHealth); 
 
         if (!target)
         {
@@ -67,6 +67,11 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         if (!spriteRenderer) spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
         OnEnter(state);
+    }
+
+    protected virtual void Start()
+    {
+        OnHealthChanged?.Invoke(health, stats.maxHealth);
     }
 
     protected virtual void Update()
@@ -102,12 +107,12 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
     protected bool IsTargetInDetectionRange()
     {
-        return CheckRange(detectionBoxSize); 
+        return CheckRange(detectionBoxSize);
     }
 
     protected bool IsTargetInAttackRange()
     {
-        return CheckRange(attackBoxSize); 
+        return CheckRange(attackBoxSize);
     }
 
     protected bool CheckRange(Vector2 size)
@@ -223,7 +228,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
         health -= Mathf.Max(1, amount);
 
-        OnHealthChanged?.Invoke(health, stats.maxHealth); 
+        OnHealthChanged?.Invoke(health, stats.maxHealth);
 
         if (health <= 0)
         {
@@ -340,5 +345,4 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     {
         return stats.maxHealth;
     }
-
 }
