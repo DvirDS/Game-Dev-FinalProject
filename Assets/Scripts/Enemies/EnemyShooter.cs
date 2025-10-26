@@ -20,16 +20,12 @@ public class EnemyShooter : EnemyBase
 
     protected override void Awake()
     {
-        base.Awake(); // קורא ל-Awake של EnemyBase (שמגדיר חיים וכו')
-
-        // --- זה הקסם ---
-        // אנו מניחים שה-stats שקיבלנו הוא מסוג ShooterStats
+        base.Awake(); 
         shooterStats = stats as ShooterStats;
         if (shooterStats == null)
         {
             Debug.LogError("EnemyShooter received wrong Stats SO!", this);
         }
-        // --- סוף הקסם ---
     }
 
     protected override void PatrolTick()

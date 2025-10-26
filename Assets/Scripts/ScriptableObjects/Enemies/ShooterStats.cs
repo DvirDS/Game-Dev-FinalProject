@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Shooter Stats", menuName = "MyGame/Shooter Stats")]
+[CreateAssetMenu(fileName = "New Shooter Stats", menuName = "Game/Shooter Stats")]
 public class ShooterStats : EnemyStats
 {
     [Header("Shooting")]

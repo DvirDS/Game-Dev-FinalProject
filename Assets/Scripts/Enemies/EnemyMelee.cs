@@ -18,10 +18,7 @@ public class EnemyMelee : EnemyBase
 
     protected override void Awake()
     {
-        base.Awake(); // קורא ל-Awake של EnemyBase (שמגדיר חיים וכו')
-
-        // --- זה הקסם ---
-        // אנו מניחים שה-stats שקיבלנו ב-EnemyBase הוא מסוג MeleeStats
+        base.Awake();
         meleeStats = stats as MeleeStats;
         if (meleeStats == null)
         {

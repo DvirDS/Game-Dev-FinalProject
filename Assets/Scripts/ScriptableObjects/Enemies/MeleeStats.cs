@@ -1,7 +1,6 @@
 using UnityEngine;
 
-// זה יורש מ-EnemyStats הבסיסי שלך
-[CreateAssetMenu(fileName = "New Melee Stats", menuName = "MyGame/Melee Stats")]
+[CreateAssetMenu(fileName = "New Melee Stats", menuName = "Game/Melee Stats")]
 public class MeleeStats : EnemyStats
 {
     [Header("Melee")]

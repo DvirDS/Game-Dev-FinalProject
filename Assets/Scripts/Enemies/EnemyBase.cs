@@ -100,20 +100,16 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         }
     }
 
-    // --- פונקציה חדשה ---
     protected bool IsTargetInDetectionRange()
     {
-        return CheckRange(detectionBoxSize); // משתמש בקופסת הגילוי
+        return CheckRange(detectionBoxSize); 
     }
 
-    // --- פונקציה חדשה ---
     protected bool IsTargetInAttackRange()
     {
-        return CheckRange(attackBoxSize); // משתמש בקופסת ההתקפה
+        return CheckRange(attackBoxSize); 
     }
 
-    // --- פונקציה ששינתה שם (לשעבר InRange) ---
-    // היא משתמשת *רק* בלוגיקת הקופסה עכשיו
     protected bool CheckRange(Vector2 size)
     {
         if (!target) return false;
@@ -128,11 +124,8 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
         if (!insideRange) return false;
 
-        // --- שינוי ---
-        // לוקח את נתוני ה-LOS מה-SO
         Vector2 linecastStart = selfPos + new Vector2(0, stats.lineOfSightYOffset);
         RaycastHit2D hit = Physics2D.Linecast(linecastStart, targetPos, stats.obstacleMask);
-        // --- סוף שינוי ---
 
         if (hit.collider != null)
         {
@@ -230,8 +223,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
         health -= Mathf.Max(1, amount);
 
-        // --- שינוי ---
-        OnHealthChanged?.Invoke(health, stats.maxHealth); // חיים מה-SO
+        OnHealthChanged?.Invoke(health, stats.maxHealth); 
 
         if (health <= 0)
         {
@@ -251,8 +243,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
     IEnumerator DieRoutine()
     {
-        // --- הוספנו את השורה הבאה ---
-        // ודא שה-UI מציג 0 חיים כשהבוס מת
+
         OnHealthChanged?.Invoke(0, stats.maxHealth);
 
         ChangeState(EnemyState.Dead);
@@ -289,26 +280,19 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         }
     }
 
-    /// <summary>
-    /// //////////////////////////
-    /// </summary>
+    // Gizmo Helper
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.cyan;
-        // --- שינוי ---
-        Vector2 linecastStart = (Vector2)transform.position + new Vector2(0, stats.lineOfSightYOffset); // נתונים מה-SO
+        Vector2 linecastStart = (Vector2)transform.position + new Vector2(0, stats.lineOfSightYOffset);
         Gizmos.DrawWireSphere(linecastStart, 0.1f);
 
-        // --- שינוי ---
-        // תמיד מצייר את הקופסאות, כי הסרנו את הלוגיקה של העיגולים
         Gizmos.color = new Color(1f, 0.8f, 0f, 0.4f);
         Gizmos.DrawWireCube(transform.position, detectionBoxSize);
 
         Gizmos.color = new Color(1f, 0.2f, 0.2f, 0.4f);
         Gizmos.DrawWireCube(transform.position, attackBoxSize);
-        // --- סוף שינוי ---
     }
-
 
     // Helpers for Tilemap-based movement safety
     // Returns the horizontal direction sign (1 for right, -1 for left) to a target position.
@@ -347,17 +331,11 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         return true;
     }
 
-    /// <summary>
-    /// מחזיר את החיים הנוכחיים
-    /// </summary>
     public int GetCurrentHealth()
     {
         return health;
     }
 
-    /// <summary>
-    /// מחזיר את החיים המקסימליים
-    /// </summary>
     public int GetMaxHealth()
     {
         return stats.maxHealth;
