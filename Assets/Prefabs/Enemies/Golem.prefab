@@ -178,23 +178,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isMultiPart: 0
-  moveSpeed: 3
-  detectionRange: 7
-  attackRange: 5
-  scoreValue: 300
+  stats: {fileID: 11400000, guid: b7f9525788b2512459cc1bcfb0134a24, type: 2}
   isBoss: 0
-  useBoxDetection: 1
   detectionBoxSize: {x: 13, y: 2.6}
   attackBoxSize: {x: 20, y: 6}
-  obstacleMask:
-    serializedVersion: 2
-    m_Bits: 256
-  lineOfSightYOffset: 0.5
   target: {fileID: 0}
   state: 0
-  maxHealth: 100
-  hurtDuration: 0.05
-  deathDestroyDelay: 0.94
   animator: {fileID: 135640591653969630}
   spriteRenderer: {fileID: 6629061337107233106}
   flipByVelocity: 1
@@ -206,12 +195,7 @@ MonoBehaviour:
   edgeCheckForward: 0.5
   edgeCheckDown: 2
   wallCheckDistance: 0.3
-  projectilePrefab: {fileID: 2305735452437659149, guid: 2ab9f4dfdfb1e45498ad2015d6dc5469, type: 3}
   muzzle: {fileID: 5764090974431102409}
-  shotsPerSecond: 1.3
-  damage: 8
-  projectileSpeed: 7
-  stopDistance: 7
   waypoints:
   - {fileID: 0}
   - {fileID: 0}

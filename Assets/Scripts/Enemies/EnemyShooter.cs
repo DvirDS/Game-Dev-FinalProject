@@ -3,12 +3,9 @@ using UnityEngine;
 public class EnemyShooter : EnemyBase
 {
     [Header("Shooting")]
-    [SerializeField] private Projectile projectilePrefab;
     [SerializeField] private Transform muzzle;
-    [SerializeField] private float shotsPerSecond = 1.5f;
-    [SerializeField] private int damage = 8;
-    [SerializeField] private float projectileSpeed = 10f;
-    [SerializeField, Min(0f)] private float stopDistance = 3f;
+
+    private ShooterStats shooterStats;
     private float cd;
 
     [Header("Patrol (Optional)")]
@@ -20,6 +17,20 @@ public class EnemyShooter : EnemyBase
     private float idleTimer;
 
     private const float MIN_STOP_DISTANCE = 0.01f;
+
+    protected override void Awake()
+    {
+        base.Awake(); // קורא ל-Awake של EnemyBase (שמגדיר חיים וכו')
+
+        // --- זה הקסם ---
+        // אנו מניחים שה-stats שקיבלנו הוא מסוג ShooterStats
+        shooterStats = stats as ShooterStats;
+        if (shooterStats == null)
+        {
+            Debug.LogError("EnemyShooter received wrong Stats SO!", this);
+        }
+        // --- סוף הקסם ---
+    }
 
     protected override void PatrolTick()
     {
@@ -73,7 +84,7 @@ public class EnemyShooter : EnemyBase
         }
 
         float distX = Mathf.Abs(targetPos.x - selfPos.x);
-        if (distX > Mathf.Max(stopDistance, MIN_STOP_DISTANCE))
+        if (distX > Mathf.Max(shooterStats.stopDistance, MIN_STOP_DISTANCE))
             MoveTowards(chasePos);
         else
             Stop();
@@ -81,7 +92,7 @@ public class EnemyShooter : EnemyBase
 
     protected override void AttackTick()
     {
-        if (!target)
+        if (!target || shooterStats == null)
         {
             Stop();
             return;
@@ -100,25 +111,25 @@ public class EnemyShooter : EnemyBase
         else
         {
             float distX = Mathf.Abs(targetPos.x - selfPos.x);
-            if (distX > stopDistance)
+            if (distX > shooterStats.stopDistance)
                 MoveTowards(lockedPos);
             else
                 Stop();
         }
 
         cd -= Time.deltaTime;
-        if (cd <= 0f && projectilePrefab && muzzle)
+        if (cd <= 0f && shooterStats.projectilePrefab && muzzle)
         {
-            var go = Instantiate(projectilePrefab, muzzle.position, muzzle.rotation);
+            var go = Instantiate(shooterStats.projectilePrefab, muzzle.position, muzzle.rotation);
             if (go.TryGetComponent<Projectile>(out var proj))
             {
                 proj.ownerTag = "Enemy";
-                proj.damage = damage;
-                proj.speed = projectileSpeed;
+                proj.damage = shooterStats.damage;
+                proj.speed = shooterStats.projectileSpeed;
                 var dir = (target.position - muzzle.position).normalized;
                 proj.Launch(dir);
             }
-            cd = 1f / Mathf.Max(shotsPerSecond, MIN_STOP_DISTANCE);
+            cd = 1f / Mathf.Max(shooterStats.shotsPerSecond, MIN_STOP_DISTANCE);
         }
     }
 

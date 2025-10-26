@@ -2,22 +2,32 @@ using UnityEngine;
 
 public class EnemyMelee : EnemyBase
 {
-    [Header("Melee")]
-    [SerializeField, Min(1)] private int meleeDamage = 12;
-    [SerializeField, Min(0f)] private float meleeRange = 1.1f;
-    [SerializeField, Min(0f)] private float hitCooldown = 0.8f;
-    [SerializeField, Min(0f)] private float stopDistance = 0.6f;
 
     [Header("Patrol (Optional)")]
     [SerializeField] private Transform[] waypoints;
     [SerializeField, Min(0f)] private float waypointReachEps = 0.1f;
     [SerializeField, Min(0f)] private float idleAtPointTime = 0.0f;
 
+    private MeleeStats meleeStats;
+
     private int wpIndex;
     private float cooldown;
     private float idleTimer;
 
     private const float MIN_STOP_DISTANCE = 0.01f;
+
+    protected override void Awake()
+    {
+        base.Awake(); // קורא ל-Awake של EnemyBase (שמגדיר חיים וכו')
+
+        // --- זה הקסם ---
+        // אנו מניחים שה-stats שקיבלנו ב-EnemyBase הוא מסוג MeleeStats
+        meleeStats = stats as MeleeStats;
+        if (meleeStats == null)
+        {
+            Debug.LogError("EnemyMelee received wrong Stats SO! Make sure you assign a 'Melee Stats' file.", this);
+        }
+    }
 
     protected override void PatrolTick()
     {
@@ -60,7 +70,7 @@ public class EnemyMelee : EnemyBase
 
     protected override void ChaseTick()
     {
-        if (!target)
+        if (!target || meleeStats == null)
         {
             Stop();
             return;
@@ -78,7 +88,7 @@ public class EnemyMelee : EnemyBase
 
         float distX = Mathf.Abs(targetPos.x - selfPos.x);
 
-        if (distX > Mathf.Max(stopDistance, MIN_STOP_DISTANCE))
+        if (distX > Mathf.Max(meleeStats.stopDistance, MIN_STOP_DISTANCE))
             MoveTowards(chasePos);
         else
             Stop();
@@ -86,7 +96,7 @@ public class EnemyMelee : EnemyBase
 
     protected override void AttackTick()
     {
-        if (!target)
+        if (!target || meleeStats == null)
         {
             Stop();
             return;
@@ -103,7 +113,7 @@ public class EnemyMelee : EnemyBase
         }
 
         float distX = Mathf.Abs(targetPos.x - selfPos.x);
-        if (distX > stopDistance)
+        if (distX > meleeStats.stopDistance)
             MoveTowards(lockedPos);
         else
             Stop();
@@ -112,10 +122,10 @@ public class EnemyMelee : EnemyBase
         if (cooldown > 0f) return;
 
         float dist = Vector2.Distance(transform.position, target.position);
-        if (dist <= meleeRange && target.TryGetComponent<IDamageable>(out var dmg))
+        if (dist <= meleeStats.meleeRange && target.TryGetComponent<IDamageable>(out var dmg))
         {
-            dmg.TakeDamage(meleeDamage);
-            cooldown = hitCooldown;
+            dmg.TakeDamage(meleeStats.meleeDamage);
+            cooldown = meleeStats.hitCooldown;
         }
     }
 }

@@ -10,21 +10,12 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] protected bool isMultiPart = false; 
 
     [Header("Stats")]
-    [SerializeField] protected float moveSpeed = 3f;
-    [SerializeField] protected float detectionRange = 8f;
-    [SerializeField] protected float attackRange = 4f;
-    [SerializeField, Min(0)] protected int scoreValue = 10;
-    [SerializeField] protected bool isBoss = false; 
+    [SerializeField] protected EnemyStats stats;
+    [SerializeField] protected bool isBoss = false;
 
     [Header("Detection Shape")]
-    [SerializeField] protected bool useBoxDetection = true; 
     [SerializeField] protected Vector2 detectionBoxSize = new Vector2(8f, 4f);
     [SerializeField] protected Vector2 attackBoxSize = new Vector2(4f, 2f);
-
-    [Header("Line of Sight")]
-    [Tooltip("Layers that block enemy vision (e.g. Walls, Ground)")]
-    [SerializeField] protected LayerMask obstacleMask;
-    [SerializeField] protected float lineOfSightYOffset = 0.5f; 
 
     [Header("Refs")]
     [SerializeField] protected Transform target;
@@ -32,12 +23,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
     [SerializeField] protected EnemyState state = EnemyState.Patrol;
 
-    [Header("Health")]
-    [SerializeField, Min(1)] protected int maxHealth = 20;
-    [SerializeField, Min(0f)] protected float hurtDuration = 0.2f;
-    [SerializeField, Min(0f)] protected float deathDestroyDelay = 1.5f;
-
-    protected int _health;
+    protected int health;
     protected bool _invulnerable;
 
     public event Action<int, int> OnHealthChanged;
@@ -51,11 +37,11 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] protected bool facingRightDefault = true;
 
     [Header("Ground / Edges (Tilemap)")]
-    [SerializeField] protected LayerMask groundMask;            
-    [SerializeField] protected Vector2 feetOffset = new Vector2(0f, -0.5f);
-    [SerializeField] protected float edgeCheckForward = 0.45f;  
-    [SerializeField] protected float edgeCheckDown = 0.9f;     
-    [SerializeField] protected float wallCheckDistance = 0.25f; 
+    public LayerMask groundMask;
+    public Vector2 feetOffset = new Vector2(0f, -0.5f);
+    public float edgeCheckForward = 0.45f;
+    public float edgeCheckDown = 0.9f;
+    public float wallCheckDistance = 0.25f;
 
     static readonly int HashSpeed = Animator.StringToHash("Speed");
     static readonly int HashIsPatrolling = Animator.StringToHash("IsPatrolling");
@@ -69,7 +55,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         rb = GetComponent<Rigidbody2D>();
         if (rb) rb.freezeRotation = true;
 
-        _health = Mathf.Max(1, maxHealth);
+        health = Mathf.Max(1, stats.maxHealth);
 
         if (!target)
         {
@@ -102,8 +88,8 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
             return;
         }
 
-        if (InRange(attackRange)) ChangeState(EnemyState.Attack);
-        else if (InRange(detectionRange)) ChangeState(EnemyState.Chase);
+        if (IsTargetInAttackRange()) ChangeState(EnemyState.Attack);
+        else if (IsTargetInDetectionRange()) ChangeState(EnemyState.Chase);
         else ChangeState(EnemyState.Patrol);
 
         switch (state)
@@ -114,33 +100,40 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         }
     }
 
-    protected bool InRange(float range)
+    // --- פונקציה חדשה ---
+    protected bool IsTargetInDetectionRange()
+    {
+        return CheckRange(detectionBoxSize); // משתמש בקופסת הגילוי
+    }
+
+    // --- פונקציה חדשה ---
+    protected bool IsTargetInAttackRange()
+    {
+        return CheckRange(attackBoxSize); // משתמש בקופסת ההתקפה
+    }
+
+    // --- פונקציה ששינתה שם (לשעבר InRange) ---
+    // היא משתמשת *רק* בלוגיקת הקופסה עכשיו
+    protected bool CheckRange(Vector2 size)
     {
         if (!target) return false;
 
         Vector2 selfPos = transform.position;
         Vector2 targetPos = target.position;
 
-        bool insideRange = false;
-
-        if (!useBoxDetection)
-        {
-            insideRange = Vector2.Distance(selfPos, targetPos) <= range;
-        }
-        else
-        {
-            Vector2 size = (range == attackRange) ? attackBoxSize : detectionBoxSize;
-            Vector2 half = size * 0.5f;
-            insideRange =
-                (targetPos.x >= selfPos.x - half.x && targetPos.x <= selfPos.x + half.x &&
-                 targetPos.y >= selfPos.y - half.y && targetPos.y <= selfPos.y + half.y);
-        }
+        Vector2 half = size * 0.5f;
+        bool insideRange =
+            (targetPos.x >= selfPos.x - half.x && targetPos.x <= selfPos.x + half.x &&
+             targetPos.y >= selfPos.y - half.y && targetPos.y <= selfPos.y + half.y);
 
         if (!insideRange) return false;
 
-        Vector2 linecastStart = selfPos + new Vector2(0, lineOfSightYOffset);
+        // --- שינוי ---
+        // לוקח את נתוני ה-LOS מה-SO
+        Vector2 linecastStart = selfPos + new Vector2(0, stats.lineOfSightYOffset);
+        RaycastHit2D hit = Physics2D.Linecast(linecastStart, targetPos, stats.obstacleMask);
+        // --- סוף שינוי ---
 
-        RaycastHit2D hit = Physics2D.Linecast(linecastStart, targetPos, obstacleMask);
         if (hit.collider != null)
         {
             return false;
@@ -153,7 +146,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     {
         Vector2 dir = (pos - (Vector2)transform.position);
         if (dir.sqrMagnitude > 0.0001f) dir.Normalize();
-        if (rb) rb.linearVelocity = dir * moveSpeed;
+        if (rb) rb.linearVelocity = dir * stats.moveSpeed;
     }
 
     protected void Stop()
@@ -235,13 +228,12 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     {
         if (state == EnemyState.Dead || _invulnerable) return;
 
-        _health -= Mathf.Max(1, amount);
+        health -= Mathf.Max(1, amount);
 
-        // --- הוספנו את השורה הבאה ---
-        // שדר את החיים המעודכנים (נוכחי, מקסימום)
-        OnHealthChanged?.Invoke(_health, maxHealth);
+        // --- שינוי ---
+        OnHealthChanged?.Invoke(health, stats.maxHealth); // חיים מה-SO
 
-        if (_health <= 0)
+        if (health <= 0)
         {
             StartCoroutine(DieRoutine());
             return;
@@ -253,7 +245,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     IEnumerator InvulnerabilityRoutine()
     {
         _invulnerable = true;
-        yield return new WaitForSeconds(hurtDuration);
+        yield return new WaitForSeconds(stats.hurtDuration);
         _invulnerable = false;
     }
 
@@ -261,20 +253,20 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     {
         // --- הוספנו את השורה הבאה ---
         // ודא שה-UI מציג 0 חיים כשהבוס מת
-        OnHealthChanged?.Invoke(0, maxHealth);
+        OnHealthChanged?.Invoke(0, stats.maxHealth);
 
         ChangeState(EnemyState.Dead);
 
         if (isBoss)
         {
             GameManager.I?.StartVictorySequence();
-            GameManager.I?.AddScore(scoreValue);
+            GameManager.I?.AddScore(stats.scoreValue);
         }
         else
         {
-            GameManager.I?.AddScore(scoreValue);
+            GameManager.I?.AddScore(stats.scoreValue);
         }
-        yield return new WaitForSeconds(deathDestroyDelay);
+        yield return new WaitForSeconds(stats.deathDestroyDelay);
         Destroy(gameObject);
     }
 
@@ -303,30 +295,18 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.cyan;
-        Vector2 linecastStart = (Vector2)transform.position + new Vector2(0, lineOfSightYOffset);
-        Gizmos.DrawWireSphere(linecastStart, 0.1f); 
+        // --- שינוי ---
+        Vector2 linecastStart = (Vector2)transform.position + new Vector2(0, stats.lineOfSightYOffset); // נתונים מה-SO
+        Gizmos.DrawWireSphere(linecastStart, 0.1f);
 
-        if (useBoxDetection)
-        {
-            Gizmos.color = new Color(1f, 0.8f, 0f, 0.4f);
+        // --- שינוי ---
+        // תמיד מצייר את הקופסאות, כי הסרנו את הלוגיקה של העיגולים
+        Gizmos.color = new Color(1f, 0.8f, 0f, 0.4f);
+        Gizmos.DrawWireCube(transform.position, detectionBoxSize);
 
-            if (useBoxDetection)
-            {
-                Gizmos.color = new Color(1f, 0.8f, 0f, 0.4f);
-                Gizmos.DrawWireCube(transform.position, detectionBoxSize);
-
-                Gizmos.color = new Color(1f, 0.2f, 0.2f, 0.4f);
-                Gizmos.DrawWireCube(transform.position, attackBoxSize);
-            }
-            else
-            {
-                Gizmos.color = new Color(1f, 0.8f, 0f, 0.5f);
-                Gizmos.DrawWireSphere(transform.position, detectionRange);
-
-                Gizmos.color = new Color(1f, 0.2f, 0.2f, 0.5f);
-                Gizmos.DrawWireSphere(transform.position, attackRange);
-            }
-        }
+        Gizmos.color = new Color(1f, 0.2f, 0.2f, 0.4f);
+        Gizmos.DrawWireCube(transform.position, attackBoxSize);
+        // --- סוף שינוי ---
     }
 
 
@@ -345,7 +325,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     {
         if (dirSign == 0) return false;
         Vector2 origin = (Vector2)transform.position + feetOffset + new Vector2(dirSign * 0.1f, 0.1f);
-        return Physics2D.Raycast(origin, new Vector2(dirSign, 0f), wallCheckDistance, obstacleMask);
+        return Physics2D.Raycast(origin, new Vector2(dirSign, 0f), wallCheckDistance, stats.obstacleMask);
     }
 
     // Checks if there is ground beneath the next step, preventing falls from edges.
@@ -372,7 +352,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     /// </summary>
     public int GetCurrentHealth()
     {
-        return _health;
+        return health;
     }
 
     /// <summary>
@@ -380,7 +360,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     /// </summary>
     public int GetMaxHealth()
     {
-        return maxHealth;
+        return stats.maxHealth;
     }
 
 }

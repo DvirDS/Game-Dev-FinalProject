@@ -14628,14 +14628,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1771183221}
     - target: {fileID: 9148317601771497406, guid: c0411c79b0e4ea6449d8b1663d4ed521, type: 3}
-      propertyPath: maxHealth
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 9148317601771497406, guid: c0411c79b0e4ea6449d8b1663d4ed521, type: 3}
-      propertyPath: obstacleMask.m_Bits
-      value: 256
-      objectReference: {fileID: 0}
-    - target: {fileID: 9148317601771497406, guid: c0411c79b0e4ea6449d8b1663d4ed521, type: 3}
       propertyPath: 'waypoints.Array.data[0]'
       value: 
       objectReference: {fileID: 1371517883}
