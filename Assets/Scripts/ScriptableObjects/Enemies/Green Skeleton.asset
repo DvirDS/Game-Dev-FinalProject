@@ -22,6 +22,6 @@ MonoBehaviour:
   hurtDuration: 0.05
   deathDestroyDelay: 1.5
   meleeDamage: 15
-  meleeRange: 2
+  meleeRange: 2.5
   hitCooldown: 0.8
   stopDistance: 0.6
